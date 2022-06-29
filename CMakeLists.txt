@@ -1,4 +1,4 @@
-set(CMAKE_PREFIX_PATH /home/maicss/qt-5.11-static-simp-amd64)
+#set(CMAKE_PREFIX_PATH /home/maicss/qt-5.11-static-simp-amd64)
 
 # set(CMAKE_EXE_LINKER_FLAGS "-static")
 # set(Qt6_FOUND TRUE)

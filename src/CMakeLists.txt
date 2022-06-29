@@ -8,7 +8,17 @@ set(SOURCE
         utils.cpp
         MainWindow.cpp
         ReadMePage.cpp
-        ReadMePage.h Page.cpp Page.h ChooseTargetPage.cpp ChooseTargetPage.h OptionsPage.cpp OptionsPage.h InstallPage.cpp InstallPage.h Task.cpp Task.h)
+        ReadMePage.h
+        Page.cpp
+        Page.h
+        ChooseTargetPage.cpp
+        ChooseTargetPage.h
+        OptionsPage.cpp
+        OptionsPage.h
+        InstallPage.cpp
+        InstallPage.h
+        Task.cpp
+        Task.h)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_AUTOMOC ON)
@@ -32,8 +42,4 @@ target_link_libraries(game-installer
         Qt5::Core
         Qt5::Gui
         Qt5::Widgets
-        /home/maicss/qt-5.11-static-simp-amd64/lib/libpng.a
-        /home/maicss/qt-5.11-static-simp-amd64/lib/libqtpcre2.a
-        /home/maicss/qt-5.11-static-simp-amd64/lib/libqtfreetype.a
-        /home/maicss/qt-5.11-static-simp-amd64/plugins/platforms/libxcb.a
         )

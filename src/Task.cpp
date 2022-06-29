@@ -4,7 +4,10 @@
 
 #include "Task.h"
 #include "utils.h"
+
 #include <iostream>
+#include <unistd.h>
+
 #include <QSysInfo>
 #include <QFile>
 #include <QFileInfo>
@@ -15,6 +18,8 @@
 #include <QDir>
 #include <QJsonArray>
 #include <QStandardPaths>
+
+
 
 using namespace std;
 Task Task::task;
@@ -35,35 +40,44 @@ void Task::install() {
     enum FileType {
         FILE,
         DIR,
-        SymLink
+        SYMLINK
+    };
+    enum Category {
+        GAME,
+        DATA
     };
     struct Entry {
         QString path;
         FileType type;
         QString target;
+        Category category;
     };
     QVector<Entry> file_list;
-    std::function<void(QString, QVector<Entry> *, QString front)> ls;
-    ls = [&](QString path, QVector<Entry> *list, QString front) {
+    std::function<void(QString, QVector<Entry> *, QString front, Category category)> ls;
+    ls = [&](QString path, QVector<Entry> *list, QString front, Category category) {
         QDir dir(path);
         for(auto entry : dir.entryList()){
             if (entry == "." || entry == "..") continue;
             QFileInfo info(path + "/" + entry);
             if (info.isDir()){
-                list->append(Entry{front+entry,DIR,""});
-                ls(path+"/"+entry,list,front+entry+"/");
+                list->append(Entry{front+entry,DIR,"",category});
+                ls(path+"/"+entry,list,front+entry+"/",category);
+                continue;
             }
-            if (info.isFile()) {
-                list->append(Entry{front+entry,FILE,""});
+            if (info.isSymLink()){
+                list->append(Entry{front+entry,DIR,info.symLinkTarget(),category});
+                continue;
+                cout<<info.absoluteFilePath().toStdString()<<endl;
             }
-            if (info.isSymLink()) {
-                list->append(Entry{front+entry,SymLink,""});
-            }
+            list->append(Entry{front+entry,FILE,"",category});
         }
     };
-    ls(config.selfDir + "/" + config.data, &file_list, "");
-    ls(config.selfDir+"/"+config.game,&file_list,"");
+    ls(config.selfDir + "/" + config.data, &file_list, "", Category::DATA);
+    ls(config.selfDir + "/" + config.game,&file_list,"", Category::GAME);
+
+    mkdirP(installTargetDir);
     for (int i = 0; i < file_list.size(); i++){
+//        cout<<file_list.at(i).path.toStdString()<<endl;
         Entry entry = file_list.at(i);
         if (entry.type == DIR) {
             QString targetDir = installTargetDir +"/"+ entry.path;
@@ -74,11 +88,20 @@ void Task::install() {
             }
             continue;
         }
-
-        QFile file(config.selfDir + "/"+config.game+"/" + entry.path);
-        QFileInfo info(file);
-        file.copy(task.installTargetDir + "/" + entry.path);
-        emit updateProgress(i, file_list.size(), "复制：" + entry.path);
+        QFile file;
+        if (entry.category == GAME){
+            file.setFileName(config.selfDir + "/"+config.game+"/" + entry.path);
+        } else {
+            file.setFileName(config.selfDir + "/"+config.data+"/" + entry.path);
+        }
+        if(entry.type == FILE) {
+            QFileInfo info(file);
+            file.copy(task.installTargetDir + "/" + entry.path);
+            emit updateProgress(i, file_list.size(), "复制：" + entry.path);
+        } else if (entry.type == SYMLINK) {
+            symlink(entry.target.toStdString().c_str(), (task.installTargetDir + "/" + entry.path).toStdString().c_str());
+            emit updateProgress(i, file_list.size(), "建立链接：" + entry.path);
+        }
     }
 
     // build desktopfile
@@ -108,6 +131,7 @@ bool Task::loadConfigFile(QString file) {
         MessageBoxExec("加载失败", "配置文件错误：没有找到配置文件");
         return false;
     }
+    file = fileInfo.absoluteFilePath();
 
     config.selfDir = getDirPath(file);
 
