@@ -1,0 +1,39 @@
+
+set(SOURCE
+        TarFile.h
+        utils.h
+        MainWindow.h
+        main.cpp
+        TarFile.cpp
+        utils.cpp
+        MainWindow.cpp
+        ReadMePage.cpp
+        ReadMePage.h Page.cpp Page.h ChooseTargetPage.cpp ChooseTargetPage.h OptionsPage.cpp OptionsPage.h InstallPage.cpp InstallPage.h Task.cpp Task.h)
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+
+find_package(Qt5 COMPONENTS
+        Core
+        Gui
+        Widgets
+        REQUIRED
+        )
+        
+
+
+add_executable(game-installer
+        ${SOURCE})
+
+target_link_libraries(game-installer
+        Qt5::Core
+        Qt5::Gui
+        Qt5::Widgets
+        /home/maicss/qt-5.11-static-simp-amd64/lib/libpng.a
+        /home/maicss/qt-5.11-static-simp-amd64/lib/libqtpcre2.a
+        /home/maicss/qt-5.11-static-simp-amd64/lib/libqtfreetype.a
+        /home/maicss/qt-5.11-static-simp-amd64/plugins/platforms/libxcb.a
+        )

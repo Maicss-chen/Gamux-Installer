@@ -1,0 +1,21 @@
+{
+  "name": "Gameux",
+  "version": "1.0",
+  "desktopFile": "cn.linuxgame.desktop",
+  "data": "data",
+  "game": [
+    {
+      "path": "game_x86",
+      "arch": "x86_64"
+    },
+    {
+      "path": "game_arm",
+      "arch": "arm64"
+    },
+    {
+      "path": "game_loongarch64",
+      "arch": "loongarch64"
+    }
+  ],
+  "readme": "安装包第一页显示的内容，可以展示用户协议等。"
+}

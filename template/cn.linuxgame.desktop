@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Gameux
+Icon={{target}}/.icon.svg
+Comment=Gameux
+Exec="{{target}}/start.sh" %u
+Version=1.0
+Type=Application
+Categories=Game;
+Terminal=false
+StartupNotify=true
