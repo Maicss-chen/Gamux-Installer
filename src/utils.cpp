@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QFileInfo>
 #include <sys/stat.h>
+#include <QTextStream>
 #include <QDir>
 QString getDirPath(QString filename) {
     return filename.left(filename.lastIndexOf('/'));
@@ -53,7 +54,7 @@ void lsDir(QString path, QVector<Entry> *list, QString front, Category category)
             continue;
         }
         if (info.isSymLink()){
-            list->append(Entry{front+entry,DIR,info.symLinkTarget(),category});
+            list->append(Entry{front+entry,SYMLINK,info.symLinkTarget(),category});
             continue;
         }
         list->append(Entry{front+entry,NORMAL_FILE,"",category});

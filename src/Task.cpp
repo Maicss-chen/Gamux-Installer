@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <unistd.h>
+#include <sys/stat.h>
 
 #include <QSysInfo>
 #include <QFile>
@@ -37,12 +38,13 @@ void Task::serAddLauncherIcon(bool add) {
 }
 
 void Task::install() {
+    QVector<QString> uninstall_list;
     QVector<Entry> file_list;
     lsDir(config.selfDir + "/" + config.data, &file_list, "", Category::DATA);
     lsDir(config.selfDir + "/" + config.game,&file_list,"", Category::GAME);
     mkdirP(installTargetDir);
+    uninstall_list.append(installTargetDir);
     for (int i = 0; i < file_list.size(); i++){
-//        cout<<file_list.at(i).path.toStdString()<<endl;
         Entry entry = file_list.at(i);
         if (entry.type == DIR) {
             QString targetDir = installTargetDir +"/"+ entry.path;
@@ -76,17 +78,34 @@ void Task::install() {
     srcDesktopFile.close();
     if (addDesktopIcon){;
         QFile desktopFile;
-        desktopFile.setFileName( QStandardPaths::writableLocation(QStandardPaths::DesktopLocation)+"/"+config.game+".desktop");
+        QString outPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation)+"/"+config.game+".desktop";
+        desktopFile.setFileName( outPath);
         desktopFile.open(QFile::WriteOnly);
         desktopFile.write(desktopText.toStdString().c_str());
+        uninstall_list.append(outPath);
         desktopFile.close();
     }
     if (addLauncherIcon){
-        QFile desktopFile( HomeDir()+"/.local/share/applications/"+config.game+".desktop");
+        QString outPath = HomeDir()+"/.local/share/applications/"+config.game+".desktop";
+        QFile desktopFile( outPath);
         desktopFile.open(QFile::WriteOnly);
         desktopFile.write(desktopText.toStdString().c_str());
+        uninstall_list.append(outPath);
         desktopFile.close();
     }
+
+    //build uninstall script
+    QFile uninstall_script(installTargetDir + "/uninstall.sh");
+    uninstall_script.open(QFile::ReadOnly | QFile::Append);
+    chmod(uninstall_script.fileName().toStdString().c_str(),0755);
+    QTextStream textStream(&uninstall_script);
+    textStream<<"#!/bin/bash"<<endl;
+    for (auto file: uninstall_list) {
+        QFileInfo info(file);
+        textStream<<"rm -rf "<<info.absoluteFilePath()<<endl;
+    }
+    textStream.flush();
+    uninstall_script.close();
     emit updateProgress(file_list.size(), file_list.size(), "安装完成");
 }
 
