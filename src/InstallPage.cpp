@@ -3,6 +3,7 @@
 //
 #include "InstallPage.h"
 #include "Task.h"
+#include <QApplication>
 InstallPage::InstallPage(QWidget *parent)
     : Page(parent)
     , progressBar(new QProgressBar(this))
@@ -13,6 +14,10 @@ InstallPage::InstallPage(QWidget *parent)
     btn_last->setEnabled(false);
     btn_next->setText("完成");
     btn_next->setEnabled(false);
+    btn_next->disconnect();
+    connect(btn_next,&QPushButton::clicked,[=](){
+        QApplication::exit(0);
+    });
 
     QVBoxLayout *layout = new QVBoxLayout;
 
@@ -25,6 +30,9 @@ InstallPage::InstallPage(QWidget *parent)
         progressBar->setMaximum(count);
         progressBar->setValue(now);
         textEdit->append(message);
+    });
+    connect(&Task::task, &Task::success,[=](){
+        btn_next->setEnabled(true);
     });
 }
 

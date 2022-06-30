@@ -34,6 +34,7 @@ public:
 signals:
     void updateProgress(int now, int count, QString message);
     void failed(QString message);
+    void success();
 private:
     QString installTargetDir;
     bool addDesktopIcon;

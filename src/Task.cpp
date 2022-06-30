@@ -107,6 +107,7 @@ void Task::install() {
     textStream.flush();
     uninstall_script.close();
     emit updateProgress(file_list.size(), file_list.size(), "安装完成");
+    emit success();
 }
 
 bool Task::loadConfigFile(QString file) {
