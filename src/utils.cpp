@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QFileInfo>
 #include <sys/stat.h>
+#include <QDir>
 QString getDirPath(QString filename) {
     return filename.left(filename.lastIndexOf('/'));
 }
@@ -39,4 +40,22 @@ bool mkdirP(QString path) {
         if(mkdir(d.toStdString().c_str(),0755)!=0) return false;
     }
     return true;
+}
+
+void lsDir(QString path, QVector<Entry> *list, QString front, Category category) {
+    QDir dir(path);
+    for(auto entry : dir.entryList()){
+        if (entry == "." || entry == "..") continue;
+        QFileInfo info(path + "/" + entry);
+        if (info.isDir()){
+            list->append(Entry{front+entry,DIR,"",category});
+            lsDir(path+"/"+entry,list,front+entry+"/",category);
+            continue;
+        }
+        if (info.isSymLink()){
+            list->append(Entry{front+entry,DIR,info.symLinkTarget(),category});
+            continue;
+        }
+        list->append(Entry{front+entry,NORMAL_FILE,"",category});
+    }
 }

@@ -37,44 +37,9 @@ void Task::serAddLauncherIcon(bool add) {
 }
 
 void Task::install() {
-    enum FileType {
-        FILE,
-        DIR,
-        SYMLINK
-    };
-    enum Category {
-        GAME,
-        DATA
-    };
-    struct Entry {
-        QString path;
-        FileType type;
-        QString target;
-        Category category;
-    };
     QVector<Entry> file_list;
-    std::function<void(QString, QVector<Entry> *, QString front, Category category)> ls;
-    ls = [&](QString path, QVector<Entry> *list, QString front, Category category) {
-        QDir dir(path);
-        for(auto entry : dir.entryList()){
-            if (entry == "." || entry == "..") continue;
-            QFileInfo info(path + "/" + entry);
-            if (info.isDir()){
-                list->append(Entry{front+entry,DIR,"",category});
-                ls(path+"/"+entry,list,front+entry+"/",category);
-                continue;
-            }
-            if (info.isSymLink()){
-                list->append(Entry{front+entry,DIR,info.symLinkTarget(),category});
-                continue;
-                cout<<info.absoluteFilePath().toStdString()<<endl;
-            }
-            list->append(Entry{front+entry,FILE,"",category});
-        }
-    };
-    ls(config.selfDir + "/" + config.data, &file_list, "", Category::DATA);
-    ls(config.selfDir + "/" + config.game,&file_list,"", Category::GAME);
-
+    lsDir(config.selfDir + "/" + config.data, &file_list, "", Category::DATA);
+    lsDir(config.selfDir + "/" + config.game,&file_list,"", Category::GAME);
     mkdirP(installTargetDir);
     for (int i = 0; i < file_list.size(); i++){
 //        cout<<file_list.at(i).path.toStdString()<<endl;
@@ -94,7 +59,7 @@ void Task::install() {
         } else {
             file.setFileName(config.selfDir + "/"+config.data+"/" + entry.path);
         }
-        if(entry.type == FILE) {
+        if(entry.type == NORMAL_FILE) {
             QFileInfo info(file);
             file.copy(task.installTargetDir + "/" + entry.path);
             emit updateProgress(i, file_list.size(), "复制：" + entry.path);
