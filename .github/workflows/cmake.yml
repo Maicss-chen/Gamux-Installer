@@ -50,11 +50,11 @@ jobs:
            ../linuxdeployqt game-installer -verbose=2 -appimage
            cd ${{github.workspace}}/build
            ./appimagetool appimage
-           mv *.AppImage Gameux-installer.AppImage
+           mv *.AppImage Gameux-installer_amd64.AppImage
     - uses: actions/upload-artifact@v2
       with:
-          name: AppImage
-          path: './*.AppImage*'
+          name: Gameux installer
+          path: ${{github.workspace}}/build/*.AppImage
     # - name: Test
       # working-directory: ${{github.workspace}}/build
       # Execute tests defined by the CMake configuration.  
