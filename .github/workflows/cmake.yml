@@ -44,7 +44,7 @@ jobs:
            wget "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O ../linuxdeployqt
            chmod +x ../linuxdeployqt
            ../linuxdeployqt game-installer -verbose=2 -appimage
-           cp ${{github.workspace}}/default.desktop .
+           cp ${{github.workspace}}/default.desktop ${{github.workspace}}/build/appimage/default.desktop
            wget "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O ../appimagetool
            chmod +x ../appimagetool
            cd ..
