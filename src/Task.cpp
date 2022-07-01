@@ -126,7 +126,7 @@ bool Task::loadConfigFile(QString file) {
     configFile.open(QFile::ReadOnly);
     auto jsonDoc = QJsonDocument::fromJson(configFile.readAll());
     auto obj = jsonDoc.object();
-    config.readme = obj.value("readme").toString();
+    config.readme = config.selfDir + "/" + obj.value("readme").toString();
     config.name = obj.value("name").toString();
     config.version = obj.value("version").toString();
     config.desktopFile = obj.value("desktopFile").toString();

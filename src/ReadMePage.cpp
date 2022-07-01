@@ -2,6 +2,7 @@
 // Created by maicss on 22-6-24.
 //
 #include <QDebug>
+#include <QFile>
 #include "ReadMePage.h"
 #include "Task.h"
 ReadMePage::ReadMePage(QWidget *parent)
@@ -9,7 +10,9 @@ ReadMePage::ReadMePage(QWidget *parent)
     , textEdit(new QTextEdit)
     , checkBox(new QCheckBox)
 {
-    textEdit->setText(Task::task.config.readme);
+    QFile readme(Task::task.config.readme);
+    readme.open(QFile::ReadOnly);
+    textEdit->setText(readme.readAll());
     textEdit->setReadOnly(true);
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(textEdit);
