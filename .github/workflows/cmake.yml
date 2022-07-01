@@ -37,16 +37,19 @@ jobs:
       
     - name: Build Package
       run: |
+           export QT_SELECT=qt5
            mkdir ${{github.workspace}}/build/appimage
            cp ${{github.workspace}}/build/src/game-installer ${{github.workspace}}/build/appimage
            cd ${{github.workspace}}/build/appimage
            wget "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O ../linuxdeployqt
            chmod +x ../linuxdeployqt
            ../linuxdeployqt game-installer -verbose=2 -appimage
+           cp ${{github.workspace}}/default.desktop .
            wget "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O ../appimagetool
            chmod +x ../appimagetool
            cd ..
            ./appimagetool appimage
+           mv *.AppImage Gameux-installer.AppImage
     - uses: actions/upload-artifact@v2
       with:
           name: AppImage
