@@ -23,7 +23,7 @@ ChooseTargetPage::ChooseTargetPage(QWidget *parent)
 
     main_layout->addWidget(tip);
     QHBoxLayout *layout = new QHBoxLayout;
-    lineEdit->setText(HomeDir() + "/gameux/" + Task::task.config.packageName);
+    lineEdit->setText(HomeDir() + "/Gamux/" + Task::task.config.packageName);
     layout->addWidget(lineEdit);
     layout->addWidget(openChooser);
     main_layout->addLayout(layout);
