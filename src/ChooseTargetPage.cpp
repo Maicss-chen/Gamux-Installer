@@ -13,10 +13,18 @@ ChooseTargetPage::ChooseTargetPage(QWidget *parent)
 {
 
     setTitle("请选择安装目录");
+    QVBoxLayout *main_layout = new QVBoxLayout;
+    QLabel *tip = new QLabel;
+    tip->setText("请避免选择路径中包含非英文、空格、特殊字符等可能影响部分游戏正常运行的字符。");
+//    tip->setFixedHeight(50);
+    tip->setWordWrap(true);
+    tip->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    main_layout->addWidget(tip);
     QHBoxLayout *layout = new QHBoxLayout;
-    lineEdit->setText(HomeDir() + "/gameux/" + Task::task.config.name); // TODO: 这里的gamename需要从配置文件中读取
+    lineEdit->setText(HomeDir() + "/gameux/" + Task::task.config.packageName);
     layout->addWidget(lineEdit);
     layout->addWidget(openChooser);
+    main_layout->addLayout(layout);
 
 
     connect(openChooser, &QPushButton::clicked, [=](){
@@ -26,11 +34,11 @@ ChooseTargetPage::ChooseTargetPage(QWidget *parent)
                                                         | QFileDialog::DontResolveSymlinks);
 
         if (!dir.isEmpty()) {
-            lineEdit->setText(dir+"/"+Task::task.config.name);
+            lineEdit->setText(dir+"/"+Task::task.config.packageName);
         }
     });
-
-    mainWidget()->setLayout(layout);
+    mainWidget()->setLayout(main_layout);
+    dynamic_cast<QVBoxLayout*>(main_layout)->addStretch();
 }
 
 

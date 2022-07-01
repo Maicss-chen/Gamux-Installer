@@ -79,7 +79,7 @@ void Task::install() {
     srcDesktopFile.close();
     if (addDesktopIcon){;
         QFile desktopFile;
-        QString outPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation)+"/"+config.game+".desktop";
+        QString outPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation)+"/"+config.packageName+".desktop";
         desktopFile.setFileName( outPath);
         desktopFile.open(QFile::WriteOnly);
         desktopFile.write(desktopText.toStdString().c_str());
@@ -87,7 +87,7 @@ void Task::install() {
         desktopFile.close();
     }
     if (addLauncherIcon){
-        QString outPath = HomeDir()+"/.local/share/applications/"+config.game+".desktop";
+        QString outPath = HomeDir()+"/.local/share/applications/"+config.packageName+".desktop";
         QFile desktopFile( outPath);
         desktopFile.open(QFile::WriteOnly);
         desktopFile.write(desktopText.toStdString().c_str());
@@ -128,6 +128,7 @@ bool Task::loadConfigFile(QString file) {
     auto obj = jsonDoc.object();
     config.readme = config.selfDir + "/" + obj.value("readme").toString();
     config.name = obj.value("name").toString();
+    config.packageName = obj.value("packageName").toString();
     config.version = obj.value("version").toString();
     config.desktopFile = obj.value("desktopFile").toString();
     config.data = obj.value("data").toString();
@@ -141,7 +142,7 @@ bool Task::loadConfigFile(QString file) {
         }
     }
     if (!flag){
-        MessageBoxExec("加载失败", "该游戏不支持\""+arch+"\"架构！");
+        MessageBoxExec("无法安装", "该游戏不支持\""+arch+"\"架构！");
         return false;
     }
 
@@ -167,6 +168,10 @@ bool Task::loadConfigFile(QString file) {
     }
     if (config.data.isEmpty()) {
         MessageBoxExec("加载失败", "配置文件错误：data配置项为空！");
+        return false;
+    }
+    if (config.packageName.isEmpty()) {
+        MessageBoxExec("加载失败", "配置文件错误：packageName配置项为空！");
         return false;
     }
     cout<<"Current cpu architecture: "<<arch.toStdString()<<endl;

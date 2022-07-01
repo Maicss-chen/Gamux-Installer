@@ -19,6 +19,7 @@ class Task : public QObject{
         QString data; // 游戏资源包
         QString desktopFile; // 快捷方式
         QString selfDir; // 配置文件所在目录
+        QString packageName; // 包名（安装目录和desktop文件的默认名称，必须是英文且不包含空格）
     };
 public slots:
     void setInstallTargetDir(QString target);
