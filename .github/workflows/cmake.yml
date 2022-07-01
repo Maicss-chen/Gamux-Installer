@@ -43,17 +43,17 @@ jobs:
            export QT_SELECT=qt5
            mkdir ${{github.workspace}}/build/appimage
            cp ${{github.workspace}}/default.desktop ${{github.workspace}}/build/appimage/default.desktop
-           cp ${{github.workspace}}/build/src/game-installer ${{github.workspace}}/build/appimage/
+           cp ${{github.workspace}}/build/src/gamux-installer ${{github.workspace}}/build/appimage/
            cd ${{github.workspace}}/build/appimage
            chmod +x ../linuxdeployqt
            chmod +x ../appimagetool
-           ../linuxdeployqt game-installer -verbose=2 -appimage
+           ../linuxdeployqt gamux-installer -verbose=2 -appimage
            cd ${{github.workspace}}/build
            ./appimagetool appimage
-           mv *.AppImage Gameux-installer_amd64.AppImage
+           mv *.AppImage Gamux-installer_amd64.AppImage
     - uses: actions/upload-artifact@v2
       with:
-          name: Gameux installer
+          name: Gamux installer
           path: ${{github.workspace}}/build/*.AppImage
     # - name: Test
       # working-directory: ${{github.workspace}}/build

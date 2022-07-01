@@ -35,10 +35,10 @@ find_package(Qt5 COMPONENTS
         
 
 
-add_executable(game-installer
+add_executable(gamux-installer
         ${SOURCE})
 
-target_link_libraries(game-installer
+target_link_libraries(gamux-installer
         Qt5::Core
         Qt5::Gui
         Qt5::Widgets
