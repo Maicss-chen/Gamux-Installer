@@ -45,6 +45,7 @@ jobs:
            chmod +x ../linuxdeployqt
            ../linuxdeployqt game-installer -verbose=2 -appimage
            echo -e "\nCategories=Development;" >> default.desktop
+           cat default.desktop
            wget "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O ../appimagetool
            chmod +x ../appimagetool
            cd ..
