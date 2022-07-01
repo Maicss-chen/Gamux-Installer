@@ -34,20 +34,21 @@ jobs:
     - name: Build
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-      
-    - name: Build Package
+    - name: Download tools
+      run: |
+           wget "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O ${{github.workspace}}/build/linuxdeployqt
+           wget "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O ${{github.workspace}}/build/appimagetool
+    - name: Run linuxdeployqt
       run: |
            export QT_SELECT=qt5
            mkdir ${{github.workspace}}/build/appimage
-           cp ${{github.workspace}}/build/src/game-installer ${{github.workspace}}/build/appimage
-           cd ${{github.workspace}}/build/appimage
-           wget "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O ../linuxdeployqt
-           chmod +x ../linuxdeployqt
-           ../linuxdeployqt game-installer -verbose=2 -appimage
            cp ${{github.workspace}}/default.desktop ${{github.workspace}}/build/appimage/default.desktop
-           wget "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O ../appimagetool
+           cp ${{github.workspace}}/build/src/game-installer ${{github.workspace}}/build/appimage/
+           cd ${{github.workspace}}/build/appimage
+           chmod +x ../linuxdeployqt
            chmod +x ../appimagetool
-           cd ..
+           ../linuxdeployqt game-installer -verbose=2 -appimage
+           cd ${{github.workspace}}/build
            ./appimagetool appimage
            mv *.AppImage Gameux-installer.AppImage
     - uses: actions/upload-artifact@v2
