@@ -37,6 +37,7 @@ jobs:
       
     - name: Build Package
       run: |
+           export QT_SELECT=qt5
            mkdir ${{github.workspace}}/build/appimage
            cp ${{github.workspace}}/build/src/game-installer ${{github.workspace}}/build/appimage
            cd ${{github.workspace}}/build/appimage
