@@ -39,8 +39,6 @@ private:
     QString installTargetDir;
     bool addDesktopIcon;
     bool addLauncherIcon;
-    TarFile *tarFile;
-
 };
 
 #endif //GAMEINSTALLER_TASK_H

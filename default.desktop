@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=Gameux Installer
+Name=Gamux Installer
 Exec=AppRun %F
 Icon=default
-Comment=Edit this default file
+Comment=Gamux Installer
 Terminal=true
 Categories=Development;

@@ -1,7 +1,7 @@
 [Desktop Entry]
-Name=Gameux
+Name=Gamux
 Icon={{target}}/.icon.svg
-Comment=Gameux
+Comment=Gamux
 Exec="{{target}}/start.sh" %u
 Version=1.0
 Type=Application
