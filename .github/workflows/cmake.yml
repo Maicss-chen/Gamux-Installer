@@ -46,8 +46,10 @@ jobs:
            ../linuxdeployqt game-installer -verbose=2 -appimage
            wget "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O ../appimagetool
            chmod +x ../appimagetool
+           echo "Categories=Development;" >> default.desktop
            cd ..
            ./appimagetool appimage
+           mv *.AppImage Gameux-installer.AppImage
     - uses: actions/upload-artifact@v2
       with:
           name: AppImage
