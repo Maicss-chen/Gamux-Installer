@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Gameux Installer
+Exec=AppRun %F
+Icon=default
+Comment=Edit this default file
+Terminal=true
+Categories=Development;
