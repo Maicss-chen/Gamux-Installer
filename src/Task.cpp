@@ -19,6 +19,7 @@
 #include <QDir>
 #include <QJsonArray>
 #include <QStandardPaths>
+#include <QTextStream>
 
 
 
@@ -96,7 +97,7 @@ void Task::install() {
 
     //build uninstall script
     QFile uninstall_script(installTargetDir + "/uninstall.sh");
-    uninstall_script.open(QFile::ReadOnly | QFile::Append);
+    uninstall_script.open(QFile::WriteOnly);
     chmod(uninstall_script.fileName().toStdString().c_str(),0755);
     QTextStream textStream(&uninstall_script);
     textStream<<"#!/bin/bash"<<endl;
