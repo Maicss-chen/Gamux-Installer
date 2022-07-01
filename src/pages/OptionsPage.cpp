@@ -3,7 +3,7 @@
 //
 
 #include "OptionsPage.h"
-#include "Task.h"
+#include "../Task.h"
 OptionsPage::OptionsPage(QWidget *parent)
     : Page(parent)
     , option_desktop_icon(new QCheckBox("添加桌面图标"))

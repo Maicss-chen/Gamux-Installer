@@ -8,10 +8,10 @@
 #include <QMainWindow>
 #include <QStackedWidget>
 
-#include "ReadMePage.h"
-#include "ChooseTargetPage.h"
-#include "OptionsPage.h"
-#include "InstallPage.h"
+#include "pages/ReadMePage.h"
+#include "pages/ChooseTargetPage.h"
+#include "pages/OptionsPage.h"
+#include "pages/InstallPage.h"
 
 class MainWindow : public QMainWindow{
     Q_OBJECT

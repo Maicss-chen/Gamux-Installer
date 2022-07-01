@@ -4,7 +4,7 @@
 #include <QApplication>
 
 #include "InstallPage.h"
-#include "Task.h"
+#include "../Task.h"
 
 InstallPage::InstallPage(QWidget *parent)
     : Page(parent)

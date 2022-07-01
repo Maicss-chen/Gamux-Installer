@@ -5,7 +5,7 @@
 #include <QFile>
 
 #include "ReadMePage.h"
-#include "Task.h"
+#include "../Task.h"
 ReadMePage::ReadMePage(QWidget *parent)
     : Page(parent)
     , textEdit(new QTextEdit)

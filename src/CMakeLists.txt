@@ -5,16 +5,16 @@ set(SOURCE
         main.cpp
         utils.cpp
         MainWindow.cpp
-        ReadMePage.cpp
-        ReadMePage.h
-        Page.cpp
-        Page.h
-        ChooseTargetPage.cpp
-        ChooseTargetPage.h
-        OptionsPage.cpp
-        OptionsPage.h
-        InstallPage.cpp
-        InstallPage.h
+        pages/ReadMePage.cpp
+        pages/ReadMePage.h
+        pages/Page.cpp
+        pages/Page.h
+        pages/ChooseTargetPage.cpp
+        pages/ChooseTargetPage.h
+        pages/OptionsPage.cpp
+        pages/OptionsPage.h
+        pages/InstallPage.cpp
+        pages/InstallPage.h
         Task.cpp
         Task.h)
 
