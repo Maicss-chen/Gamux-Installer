@@ -3,6 +3,7 @@
 //
 #include <QDebug>
 #include <QFile>
+
 #include "ReadMePage.h"
 #include "Task.h"
 ReadMePage::ReadMePage(QWidget *parent)
@@ -19,7 +20,6 @@ ReadMePage::ReadMePage(QWidget *parent)
 
     checkBox->setText("我以阅读并同意其中内容");
     layout->addWidget(checkBox);
-//    setMainWidget(textEdit);
     mainWidget()->setLayout(layout);
     setTitle("请先阅读");
     btn_next->setEnabled(false);

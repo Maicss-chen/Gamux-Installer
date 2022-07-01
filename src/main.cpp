@@ -1,9 +1,11 @@
-#include <iostream>
+
 
 #include <QApplication>
+
 #include "MainWindow.h"
 #include "Task.h"
-#include "utils.h"
+
+#include <iostream>
 using namespace std;
 int main(int argc, char *argv[]) {
     new QApplication(argc,argv);
@@ -13,15 +15,6 @@ int main(int argc, char *argv[]) {
 
     MainWindow w;
     w.show();
-
-//
-//    TarFile tarFile(argv[1]);
-//    if (tarFile.IsValidTarFile()) {
-//        cout<<"IsValid"<<endl;
-//    } else {
-//        cout<<"NotValid"<<endl;
-//    }
-//    tarFile.unzipToDir("/home/maicss/test");
 
     return QApplication::exec();
 }

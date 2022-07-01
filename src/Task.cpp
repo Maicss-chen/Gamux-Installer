@@ -1,14 +1,6 @@
 //
 // Created by maicss on 22-6-24.
 //
-
-#include "Task.h"
-#include "utils.h"
-
-#include <iostream>
-#include <unistd.h>
-#include <sys/stat.h>
-
 #include <QSysInfo>
 #include <QFile>
 #include <QFileInfo>
@@ -21,7 +13,12 @@
 #include <QStandardPaths>
 #include <QTextStream>
 
+#include "Task.h"
+#include "utils.h"
 
+#include <iostream>
+#include <unistd.h>
+#include <sys/stat.h>
 
 using namespace std;
 Task Task::task;

@@ -4,10 +4,10 @@
 
 #ifndef GAMEINSTALLER_READMEPAGE_H
 #define GAMEINSTALLER_READMEPAGE_H
-
-#include "Page.h"
 #include <QTextEdit>
 #include <QCheckBox>
+
+#include "Page.h"
 class ReadMePage : public Page {
     Q_OBJECT
 public:

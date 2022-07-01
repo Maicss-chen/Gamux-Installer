@@ -1,9 +1,11 @@
 //
 // Created by maicss on 22-6-24.
 //
+#include <QApplication>
+
 #include "InstallPage.h"
 #include "Task.h"
-#include <QApplication>
+
 InstallPage::InstallPage(QWidget *parent)
     : Page(parent)
     , progressBar(new QProgressBar(this))

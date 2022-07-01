@@ -4,10 +4,11 @@
 
 #ifndef GAMEINSTALLER_INSTALLPAGE_H
 #define GAMEINSTALLER_INSTALLPAGE_H
-#include "Page.h"
 #include <QProgressBar>
 #include <QTextEdit>
 #include <QThread>
+
+#include "Page.h"
 
 class InstallPage : public Page{
     Q_OBJECT

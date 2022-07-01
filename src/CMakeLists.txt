@@ -1,10 +1,8 @@
 
 set(SOURCE
-        TarFile.h
         utils.h
         MainWindow.h
         main.cpp
-        TarFile.cpp
         utils.cpp
         MainWindow.cpp
         ReadMePage.cpp

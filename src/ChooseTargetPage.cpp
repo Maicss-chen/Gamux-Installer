@@ -3,9 +3,11 @@
 //
 #include <QFileDialog>
 #include <QDebug>
+
 #include "ChooseTargetPage.h"
 #include "utils.h"
 #include "Task.h"
+
 ChooseTargetPage::ChooseTargetPage(QWidget *parent)
     : Page(parent)
     , lineEdit(new QLineEdit)
@@ -16,16 +18,15 @@ ChooseTargetPage::ChooseTargetPage(QWidget *parent)
     QVBoxLayout *main_layout = new QVBoxLayout;
     QLabel *tip = new QLabel;
     tip->setText("请避免选择路径中包含非英文、空格、特殊字符等可能影响部分游戏正常运行的字符。");
-//    tip->setFixedHeight(50);
     tip->setWordWrap(true);
     tip->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+
     main_layout->addWidget(tip);
     QHBoxLayout *layout = new QHBoxLayout;
     lineEdit->setText(HomeDir() + "/gameux/" + Task::task.config.packageName);
     layout->addWidget(lineEdit);
     layout->addWidget(openChooser);
     main_layout->addLayout(layout);
-
 
     connect(openChooser, &QPushButton::clicked, [=](){
         QString dir = QFileDialog::getExistingDirectory(this, "选择安装路径",

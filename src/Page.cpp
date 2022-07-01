@@ -1,10 +1,10 @@
 //
 // Created by maicss on 22-6-24.
 //
-
-#include "Page.h"
 #include <QLayout>
 #include <QDebug>
+
+#include "Page.h"
 Page::Page(QWidget *parent)
     : QWidget(parent)
     , btn_last(new QPushButton("返回"))

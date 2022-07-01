@@ -1,10 +1,8 @@
 //
 // Created by maicss on 22-6-24.
 //
-
 #include "MainWindow.h"
 #include "Task.h"
-#include <QLayout>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)

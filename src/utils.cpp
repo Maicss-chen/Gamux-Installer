@@ -1,14 +1,16 @@
 //
 // Created by maicss on 22-6-24.
 //
-
-#include "utils.h"
-#include "stdlib.h"
 #include <QMessageBox>
 #include <QFileInfo>
 #include <sys/stat.h>
 #include <QTextStream>
 #include <QDir>
+
+#include "utils.h"
+
+#include <stdlib.h>
+
 QString getDirPath(QString filename) {
     return filename.left(filename.lastIndexOf('/'));
 }

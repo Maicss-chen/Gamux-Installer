@@ -7,7 +7,6 @@
 
 #include <QObject>
 #include <QString>
-#include "TarFile.h"
 
 class Task : public QObject{
     Q_OBJECT
