@@ -50,11 +50,11 @@ jobs:
            ../linuxdeployqt gamux-installer -verbose=2 -appimage
            cd ${{github.workspace}}/build
            ./appimagetool appimage
-           mv *.AppImage Gamux-installer_amd64.AppImage
+           mv *.AppImage installer_x86_64
     - uses: actions/upload-artifact@v2
       with:
           name: Gamux installer
-          path: ${{github.workspace}}/build/*.AppImage
+          path: ${{github.workspace}}/build/installer_x86_64
     # - name: Test
       # working-directory: ${{github.workspace}}/build
       # Execute tests defined by the CMake configuration.  
