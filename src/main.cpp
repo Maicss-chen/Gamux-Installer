@@ -9,6 +9,9 @@
 using namespace std;
 int main(int argc, char *argv[]) {
     new QApplication(argc,argv);
+
+    cout<<"Installer version: "<<VERSION<<endl;
+
     if(!Task::task.loadConfigFile(argv[1])){
         return 1;
     }
