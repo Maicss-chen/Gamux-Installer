@@ -102,6 +102,7 @@ void Task::install() {
         QFileInfo info(file);
         textStream<<"rm -rf "<<info.absoluteFilePath()<<endl;
     }
+    textStream<<"notify-send \"Gamux\" \""+config.name+" 卸载成功\" -t 5000"<<endl;
     textStream.flush();
     uninstall_script.close();
     emit updateProgress(file_list.size(), file_list.size(), "安装完成");
@@ -175,6 +176,7 @@ bool Task::loadConfigFile(QString file) {
     cout<<"=========config===========\n"
         <<"name: "<< config.name.toStdString()<<endl
         <<"version: "<< config.version.toStdString()<<endl
+        <<"packageName: "<< config.packageName.toStdString()<<endl
         <<"desktopFile: "<< config.desktopFile.toStdString()<<endl
         <<"game: "<< config.game.toStdString()<<endl
         <<"data: "<< config.data.toStdString()<<endl
