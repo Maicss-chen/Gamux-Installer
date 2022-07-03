@@ -63,8 +63,8 @@ jobs:
            mv *.AppImage installer_${{ matrix.ARCH }}
     - uses: actions/upload-artifact@v2
       with:
-          name: Gamux installer
-          path: ${{github.workspace}}/build/installer_x86_64
+          name: Gamux installer(${{ matrix.ARCH }})
+          path: ${{github.workspace}}/build/installer_${{ matrix.ARCH }}
     # - name: Test
       # working-directory: ${{github.workspace}}/build
       # Execute tests defined by the CMake configuration.  

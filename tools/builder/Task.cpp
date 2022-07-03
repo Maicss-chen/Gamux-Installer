@@ -65,7 +65,6 @@ void Task::start() {
         }
         if (flag){
             // 共有文件
-            qDebug()<<item.path<<" : "<<md5;
             QFile file(workDir.path()+"/game_"+config.gameDir.at(0).arch+"/" +item.path);
             mkdirP(getDirPath(workDir.absolutePath()+"/data/"+item.path));
             file.copy(workDir.absolutePath()+"/data/"+item.path);
@@ -104,5 +103,5 @@ void Task::start() {
     QFile readme(config.readmeFilePath);
     desktop.copy(workDir.path()+"/README.txt");
 
-    
+
 }
