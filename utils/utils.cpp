@@ -10,6 +10,7 @@
 #include "utils.h"
 
 #include <stdlib.h>
+#include <QCryptographicHash>
 
 QString getDirPath(QString filename) {
     return filename.left(filename.lastIndexOf('/'));
@@ -61,4 +62,13 @@ void lsDir(QString path, QVector<Entry> *list, QString front, Category category)
         }
         list->append(Entry{front+entry,NORMAL_FILE,"",category});
     }
+}
+
+QString getMd5(QString path) {
+    QFile file(path);
+    file.open(QFile::ReadOnly);
+    QByteArray ba = QCryptographicHash::hash(file.readAll(), QCryptographicHash::Md5);
+    file.close();
+    QString md5 = ba.toHex().constData();
+    return md5;
 }

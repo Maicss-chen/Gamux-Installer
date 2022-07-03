@@ -29,7 +29,7 @@ QString getDirPath(QString filename);
 QString HomeDir();
 void MessageBoxExec(QString title, QString content, QMessageBox::Icon icon = QMessageBox::Icon::NoIcon);
 bool mkdirP(QString path);
-
 void lsDir(QString, QVector<Entry> *, QString front, Category category);
+QString getMd5(QString path);
 
 #endif //GAMEINSTALLER_UTILS_H

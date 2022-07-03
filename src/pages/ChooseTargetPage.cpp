@@ -5,7 +5,7 @@
 #include <QDebug>
 
 #include "ChooseTargetPage.h"
-#include "../utils.h"
+#include "utils.h"
 #include "../Task.h"
 
 ChooseTargetPage::ChooseTargetPage(QWidget *parent)

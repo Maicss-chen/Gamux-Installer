@@ -1,9 +1,9 @@
 
 set(SOURCE
-        utils.h
+        ${CMAKE_SOURCE_DIR}/utils/utils.h
         MainWindow.h
         main.cpp
-        utils.cpp
+        ${CMAKE_SOURCE_DIR}/utils/utils.cpp
         MainWindow.cpp
         pages/ReadMePage.cpp
         pages/ReadMePage.h
@@ -17,6 +17,7 @@ set(SOURCE
         pages/InstallPage.h
         Task.cpp
         Task.h)
+include_directories(${CMAKE_SOURCE_DIR}/utils)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_AUTOMOC ON)
