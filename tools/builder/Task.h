@@ -23,6 +23,8 @@ public:
         QString desktopFilePath;
         QString readmeFilePath;
         QVector<GameDir> gameDir;
+        QString installer_x86_64;
+        QString installer_aarch64;
     };
     Task();
     void setConfig(Config c);

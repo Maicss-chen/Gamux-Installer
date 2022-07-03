@@ -31,6 +31,8 @@ void MainWindow::start() {
     config.packageName = ui->line_packagename->text();
     config.desktopFilePath = ui->line_desktopfile->text();
     config.readmeFilePath = ui->line_readmefile->text();
+    config.installer_x86_64 = ui->line_x86_64->text();
+    config.installer_aarch64 = ui->line_aarch64->text();
     if (ui->cbx_x86_64->isChecked()){
         config.gameDir.append({"x86_64",ui->line_x86_64->text()});
     }

@@ -79,9 +79,9 @@ void Task::start() {
     QJsonObject json_config;
     json_config.insert("name", config.name);
     json_config.insert("version", config.version);
-    json_config.insert("desktopFile", config.desktopFilePath);
+    json_config.insert("desktopFile", "game.desktop");
     json_config.insert("data","data");
-    json_config.insert("readme",config.readmeFilePath);
+    json_config.insert("readme","README.txt");
     QJsonArray games;
     for (auto i : config.gameDir) {
         QJsonObject game_obj;
@@ -103,5 +103,9 @@ void Task::start() {
     QFile readme(config.readmeFilePath);
     desktop.copy(workDir.path()+"/README.txt");
 
+    QFile installer_x86_64(config.installer_x86_64);
+    desktop.copy(workDir.path()+"/installer_x86_64");
 
+    QFile installer_aarch(config.installer_aarch64);
+    desktop.copy(workDir.path()+"/installer_aarch64");
 }
