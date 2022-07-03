@@ -20,13 +20,6 @@ jobs:
     # You can convert this to a matrix build if you need cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: Ubuntu-18.04
-    strategy:
-      fail-fast: false
-      matrix:
-        ARCH: ['x86_64', 'aarch64']
-
-    env:
-      ARCH: ${{ matrix.ARCH }}
 
     steps:
     - uses: actions/checkout@v3
@@ -60,11 +53,11 @@ jobs:
            ../linuxdeployqt gamux-installer -verbose=2 -appimage
            cd ${{github.workspace}}/build
            ./appimagetool appimage
-           mv *.AppImage installer_${{ matrix.ARCH }}
+           mv *.AppImage installer_x86_64
     - uses: actions/upload-artifact@v2
       with:
-          name: Gamux installer(${{ matrix.ARCH }})
-          path: ${{github.workspace}}/build/installer_${{ matrix.ARCH }}
+          name: Gamux installer
+          path: ${{github.workspace}}/build/installer_x86_64
     # - name: Test
       # working-directory: ${{github.workspace}}/build
       # Execute tests defined by the CMake configuration.  
