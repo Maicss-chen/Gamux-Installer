@@ -78,6 +78,7 @@ void Task::start() {
     }
 
     // 建立配置文件
+    emit updateProgress(50,100,"建立配置文件");
     QJsonObject json_config;
     json_config.insert("name", config.name);
     json_config.insert("version", config.version);
@@ -100,6 +101,7 @@ void Task::start() {
     config_file.close();
 
     // 复制其他文件
+    emit updateProgress(50,100,"部署其他文件");
     QFile desktop(config.desktopFilePath);
     desktop.copy(workDir.path()+"/game.desktop");
 
@@ -114,6 +116,7 @@ void Task::start() {
 
     std::string cmd = "cd "+workDir.path().toStdString()+" && tar -cf pkg.tar *";
 
+    emit updateProgress(50,100,"资源数据打包");
     system(cmd.c_str());
     QString script = "#!/bin/bash\n"
                      "SCRIPT_ROW_COUNT=17 # 这个值务必设置为脚本内容行数-1（不算末尾的空行）\n"
@@ -134,13 +137,17 @@ void Task::start() {
                      "ret=$?\n"
                      "exit $ret\n";
 
+    emit updateProgress(50,100,"向目标写入执行脚本");
     QString outfilename = config.outDir +"/" +config.name + "_" + config.version + ".sh";
     QFile out(outfilename);
     out.remove();
     out.open(QFile::WriteOnly | QFile::Append);
     out.write(script.toStdString().c_str());
 
+    emit updateProgress(50,100,"向目标写入软件包数据");
     QFile tar(workDir.path() +"/pkg.tar");
     tar.open(QFile::ReadOnly);
     out.write(tar.readAll());
+
+    emit updateProgress(100,100,"完成："+outfilename);
 }

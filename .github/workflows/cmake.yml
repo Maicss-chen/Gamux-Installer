@@ -27,8 +27,8 @@ jobs:
     
     - name: Install Qt
       run: |
-           sudo apt update
-           sudo apt install -y qtbase5-dev
+        sudo apt update
+        sudo apt install -y qtbase5-dev
     
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
@@ -40,25 +40,33 @@ jobs:
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
     - name: Download tools
       run: |
-           wget "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O ${{github.workspace}}/build/linuxdeployqt
-           wget "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O ${{github.workspace}}/build/appimagetool
-    - name: Run linuxdeployqt
+        wget "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O ${{github.workspace}}/build/linuxdeployqt
+        wget "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O ${{github.workspace}}/build/appimagetool
+    - name: Build AppImage
       run: |
-           export QT_SELECT=qt5
-           mkdir ${{github.workspace}}/build/appimage
-           cp ${{github.workspace}}/default.desktop ${{github.workspace}}/build/appimage/default.desktop
-           cp ${{github.workspace}}/build/src/gamux-installer ${{github.workspace}}/build/appimage/
-           cd ${{github.workspace}}/build/appimage
-           chmod +x ../linuxdeployqt
-           chmod +x ../appimagetool
-           ../linuxdeployqt gamux-installer -verbose=2 -appimage
-           cd ${{github.workspace}}/build
-           ./appimagetool appimage
-           mv *.AppImage installer_x86_64
+        export QT_SELECT=qt5
+        mkdir ${{github.workspace}}/build/appimage
+        cp ${{github.workspace}}/default.desktop ${{github.workspace}}/build/appimage/default.desktop
+        cp ${{github.workspace}}/build/src/gamux-installer ${{github.workspace}}/build/appimage/
+        cd ${{github.workspace}}/build/appimage
+        chmod +x ../linuxdeployqt
+        chmod +x ../appimagetool
+        ../linuxdeployqt gamux-installer -verbose=2 -appimage
+        cd ${{github.workspace}}/build
+        ./appimagetool appimage
+        mv Application* installer_x86_64.AppImage
+        
+        mkdir ${{github.workspace}}/build/builder
+        cp ${{github.workspace}}/build/tools/builder/gamux-builder ${{github.workspace}}/build/builder/
+        cd ${{github.workspace}}/build/builder
+        ../linuxdeployqt gamux-builder -verbose=2 -appimage
+        cd ${{github.workspace}}/build
+        ./appimagetool builder
+        mv Application* builder_x86_64.AppImage
     - uses: actions/upload-artifact@v2
       with:
-          name: Gamux installer
-          path: ${{github.workspace}}/build/installer_x86_64
+          name: Gamux Tools
+          path: ${{github.workspace}}/build/*.AppImage
     # - name: Test
       # working-directory: ${{github.workspace}}/build
       # Execute tests defined by the CMake configuration.  

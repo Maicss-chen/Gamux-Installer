@@ -31,5 +31,7 @@ void MessageBoxExec(QString title, QString content, QMessageBox::Icon icon = QMe
 bool mkdirP(QString path);
 void lsDir(QString, QVector<Entry> *, QString front, Category category);
 QString getMd5(QString path);
+QString chooseDirectory();
+QString chooseFile(QString filter);
 
 #endif //GAMEINSTALLER_UTILS_H

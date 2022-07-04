@@ -18,6 +18,7 @@ public:
     ~MainWindow();
 public slots:
     void start();
+    bool check();
 private:
     Ui::MainWindow *ui;
     Task task;

@@ -6,6 +6,7 @@
 #include <sys/stat.h>
 #include <QTextStream>
 #include <QDir>
+#include <QFileDialog>
 
 #include "utils.h"
 
@@ -71,4 +72,16 @@ QString getMd5(QString path) {
     file.close();
     QString md5 = ba.toHex().constData();
     return md5;
+}
+
+QString chooseDirectory() {
+//    QFileDialog dialog;
+//    dialog.setDirectory(HomeDir());
+//    dialog.setOption(QFileDialog::ShowDirsOnly, true);
+//    dialog.exec();
+    return QFileDialog::getExistingDirectory();
+}
+
+QString chooseFile(QString filter) {
+    return QFileDialog::getOpenFileName(nullptr,"",HomeDir(),filter);
 }
