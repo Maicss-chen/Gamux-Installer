@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>884</width>
-    <height>744</height>
+    <width>887</width>
+    <height>768</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -38,7 +38,7 @@
        <item row="1" column="2">
         <widget class="QLineEdit" name="line_x86_64">
          <property name="text">
-          <string>/home/maicss/下载/Factorio2</string>
+          <string>/home/maicss/下载/KRF/game_x86_64</string>
          </property>
         </widget>
        </item>
@@ -58,7 +58,7 @@
           <string>aarch64</string>
          </property>
          <property name="checked">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -98,7 +98,11 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_5">
        <item row="1" column="1">
-        <widget class="QLineEdit" name="lineEdit"/>
+        <widget class="QLineEdit" name="line_installer_x86_64">
+         <property name="text">
+          <string>/home/maicss/下载/KRF/installer_x86_64</string>
+         </property>
+        </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_10">
@@ -115,17 +119,17 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="btn_open_installer_x86_64">
          <property name="text">
           <string>选择文件</string>
          </property>
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QLineEdit" name="lineEdit_2"/>
+        <widget class="QLineEdit" name="line_installer_aarch64"/>
        </item>
        <item row="2" column="2">
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="btn_open_installer_aarch64">
          <property name="text">
           <string>选择文件</string>
          </property>
@@ -134,7 +138,7 @@
        <item row="0" column="0" colspan="3">
         <widget class="QLabel" name="label_12">
          <property name="text">
-          <string>请到：https://github.com/Maicss-chen/Gamux-Installer/releases下载对应架构的最新版本的AppImage可执行文件。</string>
+          <string>请到：https://github.com/Maicss-chen/Gamux-Installer/releases下载对应架构的最新版本的AppImage可执行文件。即使游戏不支持某些架构，这里也应当选择对应架构的安装器。</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -161,10 +165,18 @@
         </widget>
        </item>
        <item row="1" column="1" colspan="2">
-        <widget class="QLineEdit" name="line_name"/>
+        <widget class="QLineEdit" name="line_name">
+         <property name="text">
+          <string>皇家守卫军</string>
+         </property>
+        </widget>
        </item>
        <item row="2" column="1" colspan="2">
-        <widget class="QLineEdit" name="line_version"/>
+        <widget class="QLineEdit" name="line_version">
+         <property name="text">
+          <string>1.4.4</string>
+         </property>
+        </widget>
        </item>
        <item row="5" column="0">
         <widget class="QLabel" name="label_4">
@@ -207,10 +219,18 @@
         </widget>
        </item>
        <item row="3" column="1" colspan="2">
-        <widget class="QLineEdit" name="line_packagename"/>
+        <widget class="QLineEdit" name="line_packagename">
+         <property name="text">
+          <string>krf</string>
+         </property>
+        </widget>
        </item>
        <item row="5" column="1">
-        <widget class="QLineEdit" name="line_desktopfile"/>
+        <widget class="QLineEdit" name="line_desktopfile">
+         <property name="text">
+          <string>/home/maicss/下载/KRF/game.desktop</string>
+         </property>
+        </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_2">
@@ -227,7 +247,11 @@
         </widget>
        </item>
        <item row="6" column="1">
-        <widget class="QLineEdit" name="line_readmefile"/>
+        <widget class="QLineEdit" name="line_readmefile">
+         <property name="text">
+          <string>/home/maicss/下载/KRF/README.txt</string>
+         </property>
+        </widget>
        </item>
        <item row="5" column="2">
         <widget class="QPushButton" name="btn_open_desktopfile">

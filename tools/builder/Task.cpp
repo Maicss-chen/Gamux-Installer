@@ -8,6 +8,7 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QProcess>
 
 void Task::setConfig(Task::Config c) {
     config = c;
@@ -40,6 +41,7 @@ void Task::start() {
             p++;
             QString out = workDir.path()+"/game_"+item.arch +"/"+f.path;;
             QFile file(item.directory + "/" +f.path);
+            mkdirP(getDirPath(out));
             file.copy(out);
         }
     }
@@ -79,6 +81,7 @@ void Task::start() {
     QJsonObject json_config;
     json_config.insert("name", config.name);
     json_config.insert("version", config.version);
+    json_config.insert("packageName", config.packageName);
     json_config.insert("desktopFile", "game.desktop");
     json_config.insert("data","data");
     json_config.insert("readme","README.txt");
@@ -101,11 +104,43 @@ void Task::start() {
     desktop.copy(workDir.path()+"/game.desktop");
 
     QFile readme(config.readmeFilePath);
-    desktop.copy(workDir.path()+"/README.txt");
+    readme.copy(workDir.path()+"/README.txt");
 
     QFile installer_x86_64(config.installer_x86_64);
-    desktop.copy(workDir.path()+"/installer_x86_64");
+    installer_x86_64.copy(workDir.path()+"/installer_x86_64");
 
     QFile installer_aarch(config.installer_aarch64);
-    desktop.copy(workDir.path()+"/installer_aarch64");
+    installer_aarch.copy(workDir.path()+"/installer_aarch64");
+
+    std::string cmd = "cd "+workDir.path().toStdString()+" && tar -cf pkg.tar *";
+
+    system(cmd.c_str());
+    QString script = "#!/bin/bash\n"
+                     "SCRIPT_ROW_COUNT=17 # 这个值务必设置为脚本内容行数-1（不算末尾的空行）\n"
+                     "TEMP_DIR=/tmp/Gamux\n"
+                     "HOST_ARCH=`uname -m`\n"
+                     "notify-send \"Gamux\" \"正在解压数据，安装器稍后将自动启动\" -t 5000\n"
+                     "line=`wc -l $0 | awk '{print $1}'`\n"
+                     "line=`expr $line - $SCRIPT_ROW_COUNT`\n"
+                     "if [ -d \"/tmp/Gamux\" ]; then\n"
+                     "    rm -r $TEMP_DIR/*\n"
+                     "else\n"
+                     "    mkdir $TEMP_DIR\n"
+                     "fi\n"
+                     "tail -n $line $0 | tar -xC $TEMP_DIR\n"
+                     "cd $TEMP_DIR\n"
+                     "chmod +x ./installer_${HOST_ARCH}\n"
+                     "./installer_${HOST_ARCH} ./config.json\n"
+                     "ret=$?\n"
+                     "exit $ret\n";
+
+    QString outfilename = config.outDir +"/" +config.name + "_" + config.version + ".sh";
+    QFile out(outfilename);
+    out.remove();
+    out.open(QFile::WriteOnly | QFile::Append);
+    out.write(script.toStdString().c_str());
+
+    QFile tar(workDir.path() +"/pkg.tar");
+    tar.open(QFile::ReadOnly);
+    out.write(tar.readAll());
 }
