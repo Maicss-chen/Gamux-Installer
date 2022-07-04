@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=Gamux Installer
+Name=Gamux
 Exec=AppRun %F
 Icon=default
-Comment=Gamux Installer
+Comment=Gamux
 Terminal=true
 Categories=Development;
