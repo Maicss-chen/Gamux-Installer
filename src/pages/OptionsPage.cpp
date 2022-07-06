@@ -26,6 +26,6 @@ void OptionsPage::showed() {
 }
 
 void OptionsPage::updateData() {
-    Task::task.setAddDesktopIcon(option_desktop_icon);
-    Task::task.serAddLauncherIcon(option_launcher_icon);
+    Task::task.setAddDesktopIcon(option_desktop_icon->isChecked());
+    Task::task.serAddLauncherIcon(option_launcher_icon->isChecked());
 }
