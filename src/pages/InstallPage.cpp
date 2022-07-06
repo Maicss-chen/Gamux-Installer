@@ -28,10 +28,12 @@ InstallPage::InstallPage(QWidget *parent)
     mainWidget()->setLayout(layout);
 
     textEdit->setReadOnly(true);
-    connect(&Task::task, &Task::updateProgress,[=](int now, int count, QString message){
-        progressBar->setMaximum(count);
-        progressBar->setValue(now);
-        textEdit->append(message);
+    connect(&Task::task, &Task::updateProgress,[=](size_t now, size_t count, const QString& message){
+        progressBar->setMaximum(int(count));
+        progressBar->setValue(int(now));
+        QMetaObject::invokeMethod(textEdit, "append", Q_ARG(QString,message));
+        QThread::msleep(1);
+        // textEdit->setText(message);
     });
     connect(&Task::task, &Task::success,[=](){
         btn_next->setEnabled(true);
@@ -39,7 +41,12 @@ InstallPage::InstallPage(QWidget *parent)
 }
 
 void InstallPage::showed() {
-    Task::task.install();
+    installThread = new QThread(this);
+    installThread->start();
+
+    Task::task.moveToThread(installThread);
+    connect(this, &InstallPage::startInstall,&(Task::task), &Task::install);
+    emit startInstall();
 }
 
 void InstallPage::updateData() {

@@ -15,6 +15,7 @@
 
 #include "Task.h"
 #include "utils.h"
+#include "TarFile.h"
 
 #include <iostream>
 #include <unistd.h>
@@ -37,37 +38,26 @@ void Task::serAddLauncherIcon(bool add) {
 
 void Task::install() {
     QVector<QString> uninstall_list;
-    QVector<Entry> file_list;
-    lsDir(config.selfDir + "/" + config.data, &file_list, "", Category::DATA);
-    lsDir(config.selfDir + "/" + config.game,&file_list,"", Category::GAME);
     mkdirP(installTargetDir);
     uninstall_list.append(installTargetDir);
-    for (int i = 0; i < file_list.size(); i++){
-        Entry entry = file_list.at(i);
-        if (entry.type == DIR) {
-            QString targetDir = installTargetDir +"/"+ entry.path;
-            emit updateProgress(i, file_list.size(), "创建：" + entry.path);
-            if (!mkdirP(targetDir)){
-                emit failed("文件夹"+targetDir+"创建失败");
-                return;
-            }
-            continue;
-        }
-        QFile file;
-        if (entry.category == GAME){
-            file.setFileName(config.selfDir + "/"+config.game+"/" + entry.path);
-        } else {
-            file.setFileName(config.selfDir + "/"+config.data+"/" + entry.path);
-        }
-        if(entry.type == NORMAL_FILE) {
-            QFileInfo info(file);
-            file.copy(task.installTargetDir + "/" + entry.path);
-            emit updateProgress(i, file_list.size(), "复制：" + entry.path);
-        } else if (entry.type == SYMLINK) {
-            symlink(entry.target.toStdString().c_str(), (task.installTargetDir + "/" + entry.path).toStdString().c_str());
-            emit updateProgress(i, file_list.size(), "建立链接：" + entry.path);
-        }
-    }
+
+    TarFile data((config.selfDir + "/" + config.data).toStdString().c_str());
+    TarFile game((config.selfDir + "/" + config.game).toStdString().c_str());
+
+    size_t dataFileCount = data.getNodeCount();
+    size_t fileCount = dataFileCount;
+    fileCount += game.getNodeCount();
+
+
+    connect(&data, &TarFile::progressReady, [=](size_t now, const QString& filename){
+        emit updateProgress(now, fileCount, filename);
+    });
+    connect(&data, &TarFile::progressReady, [=](size_t now, const QString& filename){
+        emit updateProgress(dataFileCount + now, fileCount, filename);
+    });
+
+    data.unpack(installTargetDir);
+    game.unpack(installTargetDir);
 
     // build desktopfile
     QFile srcDesktopFile(config.selfDir + "/" + config.desktopFile);
@@ -98,14 +88,14 @@ void Task::install() {
     chmod(uninstall_script.fileName().toStdString().c_str(),0755);
     QTextStream textStream(&uninstall_script);
     textStream<<"#!/bin/bash"<<endl;
-    for (auto file: uninstall_list) {
+    for (const auto& file: uninstall_list) {
         QFileInfo info(file);
         textStream<<"rm -rf "<<info.absoluteFilePath()<<endl;
     }
-    textStream<<"notify-send \"Gamux\" \""+config.name+" 卸载成功\" -t 5000"<<endl;
+    textStream<<R"(notify-send "Gamux" ")"+config.name+" 卸载成功\" -t 5000"<<endl;
     textStream.flush();
     uninstall_script.close();
-    emit updateProgress(file_list.size(), file_list.size(), "安装完成");
+    emit updateProgress(1, 1, "安装完成");
     emit success();
 }
 

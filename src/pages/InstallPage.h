@@ -14,6 +14,8 @@ class InstallPage : public Page{
     Q_OBJECT
 public:
     explicit InstallPage(QWidget *parent);
+signals:
+    void startInstall();
 private:
     void showed() override;
     void updateData() override;

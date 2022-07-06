@@ -75,10 +75,6 @@ QString getMd5(QString path) {
 }
 
 QString chooseDirectory() {
-//    QFileDialog dialog;
-//    dialog.setDirectory(HomeDir());
-//    dialog.setOption(QFileDialog::ShowDirsOnly, true);
-//    dialog.exec();
     return QFileDialog::getExistingDirectory();
 }
 

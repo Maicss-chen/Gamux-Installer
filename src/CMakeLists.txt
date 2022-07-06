@@ -1,9 +1,11 @@
 
 set(SOURCE
         ${CMAKE_SOURCE_DIR}/utils/utils.h
+        ${CMAKE_SOURCE_DIR}/utils/utils.cpp
+        ${CMAKE_SOURCE_DIR}/utils/TarFile.cpp
+        ${CMAKE_SOURCE_DIR}/utils/TarFile.h
         MainWindow.h
         main.cpp
-        ${CMAKE_SOURCE_DIR}/utils/utils.cpp
         MainWindow.cpp
         pages/ReadMePage.cpp
         pages/ReadMePage.h

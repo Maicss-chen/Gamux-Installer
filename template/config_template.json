@@ -2,14 +2,15 @@
   "name": "Gamux",
   "version": "1.0",
   "desktopFile": "cn.linuxgame.desktop",
+  "packageName": "linuxgame",
   "data": "data",
   "game": [
     {
-      "path": "game_x86",
+      "path": "game_x86.tar",
       "arch": "x86_64"
     },
     {
-      "path": "game_arm",
+      "path": "game_arm.tar",
       "arch": "arm64"
     },
     {

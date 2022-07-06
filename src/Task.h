@@ -32,7 +32,7 @@ public:
     Config config;
 
 signals:
-    void updateProgress(int now, int count, QString message);
+    void updateProgress(size_t now, size_t count, QString message);
     void failed(QString message);
     void success();
 private:
