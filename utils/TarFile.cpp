@@ -91,7 +91,8 @@ bool TarFile::unpack(const QString& target, const QString& filterPath) {
         size_t file_block_count = (file_size + block_size - 1) / block_size;
         mode_t mode;
         sscanf(header->mode, "%o", &mode);
-        auto targetFilename = target +"/"+ QString(header->name).right(QString(header->name).length()-filterPath.length());
+        QString fname = QString(header->prefix) + QString(header->name);
+        auto targetFilename = target +"/"+ QString(fname).right(QString(fname).length()-filterPath.length());
         FILE *outFile;
         char* content;
         if (QString(header->name).left(filterPath.length()) == filterPath){
@@ -116,29 +117,30 @@ bool TarFile::unpack(const QString& target, const QString& filterPath) {
                     fclose(outFile);
                     chmod(targetFilename.toStdString().c_str(), mode);
                     break;
-                case LNKTYPE:
-                    // hard link
-                    break;
+//                case LNKTYPE:
+//                    // hard link
+//                    break;
                 case SYMTYPE:
                     // symbolic link
                     symlink(header->linkname,targetFilename.toStdString().c_str());
                     break;
-                case CHRTYPE:
-                    // device file/special file
-                    break;
-                case BLKTYPE:
-                    // block device
-                    break;
+//                case CHRTYPE:
+//                    // device file/special file
+//                    break;
+//                case BLKTYPE:
+//                    // block device
+//                    break;
                 case DIRTYPE:
                     mkdirP(targetFilename);
                     // directory
                     break;
-                case FIFOTYPE:
-                    // named pipe
-                    break;
-                case CONTTYPE:
-                    break;
+//                case FIFOTYPE:
+//                    // named pipe
+//                    break;
+//                case CONTTYPE:
+//                    break;
                 default:
+                    qDebug()<<targetFilename << header->typeflag;
                     break;
             }
         }

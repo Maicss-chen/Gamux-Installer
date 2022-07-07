@@ -55,10 +55,10 @@ void Task::install() {
     });
     tarFile->unpack(installTargetDir,config.data+"/");
     tarFile->disconnect();
-    connect(tarFile, &TarFile::progressReady, [=](size_t now, const QString& filename){
-        emit updateProgress(now + dataFileCount, fileCount, filename);
-    });
-    tarFile->unpack(installTargetDir,config.game+"/");
+//    connect(tarFile, &TarFile::progressReady, [=](size_t now, const QString& filename){
+//        emit updateProgress(now + dataFileCount, fileCount, filename);
+//    });
+//    tarFile->unpack(installTargetDir,config.game+"/");
 
     // build desktopfile
     QString desktopText = tarFile->readTextFile(config.desktopFile);
