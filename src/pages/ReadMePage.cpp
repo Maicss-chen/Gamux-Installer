@@ -11,11 +11,9 @@ ReadMePage::ReadMePage(QWidget *parent)
     , textEdit(new QTextEdit)
     , checkBox(new QCheckBox)
 {
-    QFile readme(Task::task.config.readme);
-    readme.open(QFile::ReadOnly);
-    textEdit->setText(readme.readAll());
+    textEdit->setText(Task::task.config.readme);
     textEdit->setReadOnly(true);
-    QVBoxLayout *layout = new QVBoxLayout;
+    auto *layout = new QVBoxLayout;
     layout->addWidget(textEdit);
 
     checkBox->setText("我以阅读并同意其中内容");

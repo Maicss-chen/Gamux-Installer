@@ -15,7 +15,6 @@
 
 #include "Task.h"
 #include "utils.h"
-#include "TarFile.h"
 
 #include <iostream>
 #include <unistd.h>
@@ -41,29 +40,28 @@ void Task::install() {
     mkdirP(installTargetDir);
     uninstall_list.append(installTargetDir);
 
-    TarFile data((config.selfDir + "/" + config.data).toStdString().c_str());
-    TarFile game((config.selfDir + "/" + config.game).toStdString().c_str());
+//    TarFile data((config.selfDir + "/" + config.data).toStdString().c_str());
+//    TarFile game((config.selfDir + "/" + config.game).toStdString().c_str());
 
-    size_t dataFileCount = data.getNodeCount();
+    size_t dataFileCount = tarFile->getNodeCount(config.data+"/");
     size_t fileCount = dataFileCount;
-    fileCount += game.getNodeCount();
+    fileCount += tarFile->getNodeCount(config.game+"/");
 
 
-    connect(&data, &TarFile::progressReady, [=](size_t now, const QString& filename){
-        emit updateProgress(now, fileCount, filename);
+
+    connect(tarFile, &TarFile::progressReady, [=](size_t now, const QString& filename){
+        emit updateProgress(now, dataFileCount, filename);
     });
-    connect(&data, &TarFile::progressReady, [=](size_t now, const QString& filename){
-        emit updateProgress(dataFileCount + now, fileCount, filename);
+    tarFile->unpack(installTargetDir,config.data+"/");
+    tarFile->disconnect();
+    connect(tarFile, &TarFile::progressReady, [=](size_t now, const QString& filename){
+        emit updateProgress(now + dataFileCount, fileCount, filename);
     });
-
-    data.unpack(installTargetDir);
-    game.unpack(installTargetDir);
+    tarFile->unpack(installTargetDir,config.game+"/");
 
     // build desktopfile
-    QFile srcDesktopFile(config.selfDir + "/" + config.desktopFile);
-    srcDesktopFile.open(QFile::ReadOnly);
-    QString desktopText = srcDesktopFile.readAll().replace("{{target}}",installTargetDir.toStdString().c_str());
-    srcDesktopFile.close();
+    QString desktopText = tarFile->readTextFile(config.desktopFile);
+    desktopText = desktopText.replace("{{target}}",installTargetDir.toStdString().c_str());
     if (addDesktopIcon){;
         QFile desktopFile;
         QString outPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation)+"/"+config.packageName+".desktop";
@@ -99,22 +97,21 @@ void Task::install() {
     emit success();
 }
 
-bool Task::loadConfigFile(QString file) {
-    QFileInfo fileInfo(file);
-    if (!fileInfo.exists()){
+bool Task::loadConfigFile(const QString& file, long tarSize) {
+    tarFile = new TarFile;
+    tarFile->open(file.toStdString().c_str(),tarSize);
+    QString configContent = tarFile->readTextFile("config.json");
+    if (configContent.isEmpty()){
         MessageBoxExec("加载失败", "配置文件错误：没有找到配置文件");
         return false;
     }
-    file = fileInfo.absoluteFilePath();
+
 
     config.selfDir = getDirPath(file);
 
-    QFile configFile(file);
-
-    configFile.open(QFile::ReadOnly);
-    auto jsonDoc = QJsonDocument::fromJson(configFile.readAll());
+    auto jsonDoc = QJsonDocument::fromJson(configContent.toUtf8());
     auto obj = jsonDoc.object();
-    config.readme = config.selfDir + "/" + obj.value("readme").toString();
+    config.readme = tarFile->readTextFile(obj.value("readme").toString());
     config.name = obj.value("name").toString();
     config.packageName = obj.value("packageName").toString();
     config.version = obj.value("version").toString();

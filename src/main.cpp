@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
 
     cout<<"Installer version: "<<VERSION<<endl;
 
-    if(!Task::task.loadConfigFile(argv[1])){
+    if(!Task::task.loadConfigFile(argv[1], QString(argv[2]).toLong())){
         return 1;
     }
 

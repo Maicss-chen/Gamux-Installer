@@ -7,6 +7,7 @@
 
 #include <QObject>
 #include <QString>
+#include "TarFile.h"
 
 class Task : public QObject{
     Q_OBJECT
@@ -25,11 +26,12 @@ public slots:
     void setAddDesktopIcon(bool add);
     void serAddLauncherIcon(bool add);
     void install();
-    bool loadConfigFile(QString file);
+    bool loadConfigFile(const QString& file, long tarSize);
 
 public:
     static Task task;
     Config config;
+    TarFile *tarFile;
 
 signals:
     void updateProgress(size_t now, size_t count, QString message);

@@ -2,6 +2,8 @@
 // Created by maicss on 22-6-24.
 //
 #include <QApplication>
+#include <QTimer>
+#include <QScrollBar>
 
 #include "InstallPage.h"
 #include "../Task.h"
@@ -9,7 +11,7 @@
 InstallPage::InstallPage(QWidget *parent)
     : Page(parent)
     , progressBar(new QProgressBar(this))
-    , textEdit(new QTextEdit(this))
+    , labelOut(new QLabel(this))
     , installThread(new QThread(this))
 {
     setTitle("正在安装");
@@ -24,17 +26,23 @@ InstallPage::InstallPage(QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout;
 
     layout->addWidget(progressBar);
-    layout->addWidget(textEdit);
+    layout->addWidget(labelOut);
     mainWidget()->setLayout(layout);
 
-    textEdit->setReadOnly(true);
+    labelOut->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+
     connect(&Task::task, &Task::updateProgress,[=](size_t now, size_t count, const QString& message){
         progressBar->setMaximum(int(count));
         progressBar->setValue(int(now));
-        QMetaObject::invokeMethod(textEdit, "append", Q_ARG(QString,message));
-        QThread::msleep(1);
-        // textEdit->setText(message);
+        out = message;
     });
+    auto *timer = new QTimer;
+    timer->setInterval(100);
+    connect(timer,&QTimer::timeout,[=](){
+        labelOut->setText(out);
+    });
+    timer->start();
+
     connect(&Task::task, &Task::success,[=](){
         btn_next->setEnabled(true);
     });

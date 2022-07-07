@@ -67,13 +67,18 @@ typedef struct posix_header
 class TarFile : public QObject{
     Q_OBJECT
 public:
-    explicit TarFile(const char* tar_name);
-    ~TarFile();
-    size_t getNodeCount();
-    bool unpack(const QString& target);
+    explicit TarFile();
+
+    ~TarFile() override;
+    size_t getNodeCount(const QString& filterPath="");
+    bool open(const char* tar_name,unsigned long endSize);
+    bool unpack(const QString& target, const QString& filterPath="");
+    QString readTextFile(const QString& filename);
 signals:
     void progressReady(size_t now, QString filename);
 private:
     FILE* file;
+    long offset{};
+    long tar_size{};
 };
 #endif //GAMUX_INSTALLER_TAR_H

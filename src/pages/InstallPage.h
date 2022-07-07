@@ -20,8 +20,9 @@ private:
     void showed() override;
     void updateData() override;
     QProgressBar *progressBar;
-    QTextEdit *textEdit;
+    QLabel *labelOut;
     QThread *installThread;
+    QString out;
 };
 
 

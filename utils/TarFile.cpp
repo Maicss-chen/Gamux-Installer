@@ -16,12 +16,18 @@
 #include <sys/stat.h>
 using namespace std;
 
-TarFile::TarFile(const char* tar_name)
-        : file(nullptr)
+TarFile::TarFile() : file(nullptr)
 {
-    file = fopen(tar_name, "rb");
 }
+bool TarFile::open(const char *tar_name, unsigned long tarSize) {
+    tar_size=tarSize;
+    file = fopen(tar_name, "rb");
 
+    fseek(file, 0, SEEK_END);
+    size_t size = ftell(file);
+    fseek(file, 0, SEEK_SET);
+    this->offset = size - tar_size ;
+}
 
 TarFile::~TarFile()
 {
@@ -31,40 +37,40 @@ TarFile::~TarFile()
     }
 }
 
-size_t TarFile::getNodeCount() {
+size_t TarFile::getNodeCount(const QString& filterPath) {
     if (!file) return 0;
     const int block_size{ 512 };
     unsigned char buf[block_size];
     auto* header = (tar_posix_header*)buf;
     memset(buf, 0, block_size);
 
-    fseek(file, 0, SEEK_END);
-    size_t size = ftell(file);
-    fseek(file, 0, SEEK_SET);
-    if (size % block_size != 0) {
-        fprintf(stderr, "tar file size should be a multiple of 512 bytes: %zu\n", size);
+    if (tar_size % block_size != 0) {
+        fprintf(stderr, "tar file size should be a multiple of 512 bytes: %zu\n", offset);
         return 0;
     }
 
-    size_t pos{ 0 };
+    size_t pos{ unsigned (offset) };
     size_t res = 0;
+    fseek(file, offset, SEEK_SET);
     while (true) {
         size_t read_size = fread(buf, block_size, 1, file);
         if (read_size != 1) break;
         if (strncmp(header->magic, TMAGIC, 5) != 0) break;
-        res++;
         pos += block_size;
         size_t file_size{0};
         sscanf(header->size, "%lo", &file_size);
         size_t file_block_count = (file_size + block_size - 1) / block_size;
         pos += file_block_count * block_size;
+        if (QString(header->name).left(filterPath.length()) == filterPath){
+            res++;
+        }
         fseek(file, pos, SEEK_SET);
     }
-    fseek(file, 0, SEEK_SET);
+    fseek(file, offset, SEEK_SET);
     return res;
 }
 
-bool TarFile::unpack(const QString& target) {
+bool TarFile::unpack(const QString& target, const QString& filterPath) {
     if (!file) return false;
     mkdirP(target);
     const int block_size{ 512 };
@@ -72,8 +78,9 @@ bool TarFile::unpack(const QString& target) {
     auto* header = (tar_posix_header*)buf;
     memset(buf, 0, block_size);
 
-    size_t pos{ 0 };
+    size_t pos{ unsigned (offset) };
     size_t now = 0;
+    fseek(file, offset, SEEK_SET);
     while (true) {
         now++;
         emit progressReady(now,header->name);
@@ -86,23 +93,26 @@ bool TarFile::unpack(const QString& target) {
         size_t file_block_count = (file_size + block_size - 1) / block_size;
         mode_t mode;
         sscanf(header->mode, "%o", &mode);
+        auto targetFilename = target +"/"+ QString(header->name).right(QString(header->name).length()-filterPath.length());
+        qDebug()<<targetFilename;
         FILE *outFile;
         char* content;
-        auto targetFilename = target +"/"+ header->name;
         switch (header->typeflag) {
             case REGTYPE: // intentionally dropping through
             case AREGTYPE:
                 // normal file
-                outFile = fopen(targetFilename.toStdString().c_str() , "w+");
-                content = new char[file_size];
-                fread(content, file_size,1,file);
-                for (int i = 0; i < file_size; ++i) {
-                    fputc(content[i],outFile);
+                if (QString(header->name).left(filterPath.length()) == filterPath){
+                    outFile = fopen(targetFilename.toStdString().c_str() , "w+");
+                    content = new char[file_size];
+                    fread(content, file_size,1,file);
+                    for (int i = 0; i < file_size; ++i) {
+                        fputc(content[i],outFile);
+                    }
+                    delete content;
+                    fflush(outFile);
+                    fclose(outFile);
+                    chmod(targetFilename.toStdString().c_str(), mode);
                 }
-                delete content;
-                fflush(outFile);
-                fclose(outFile);
-                chmod(targetFilename.toStdString().c_str(), mode);
                 break;
             case LNKTYPE:
                 // hard link
@@ -132,7 +142,45 @@ bool TarFile::unpack(const QString& target) {
         pos += file_block_count * block_size;
         fseek(file, pos, SEEK_SET);
     }
-    fseek(file, 0, SEEK_SET);
+    fseek(file, offset, SEEK_SET);
 
     return true;
+}
+
+QString TarFile::readTextFile(const QString& filename) {
+    if (!file) return "";
+    const int block_size{ 512 };
+    unsigned char buf[block_size];
+    auto* header = (tar_posix_header*)buf;
+    memset(buf, 0, block_size);
+
+    size_t pos{ unsigned (offset) };
+    fseek(file, offset, SEEK_SET);
+    while (true) {
+        size_t read_size = fread(buf, block_size, 1, file);
+        if (read_size != 1) break;
+        if (strncmp(header->magic, TMAGIC, 5) != 0) break;
+        pos += block_size;
+        size_t file_size{0};
+        sscanf(header->size, "%lo", &file_size);
+        size_t file_block_count = (file_size + block_size - 1) / block_size;
+        char* content;
+        switch (header->typeflag) {
+            case REGTYPE: // intentionally dropping through
+            case AREGTYPE:
+                if (filename==header->name){
+                    content = new char[file_size];
+                    fread(content, file_size,1,file);
+                    fseek(file, offset, SEEK_SET);
+                    return {content};
+                }
+            default:
+                break;
+        }
+        pos += file_block_count * block_size;
+        fseek(file, pos, SEEK_SET);
+    }
+    fseek(file, offset, SEEK_SET);
+
+    return "";
 }
