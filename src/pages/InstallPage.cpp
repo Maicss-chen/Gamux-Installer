@@ -32,13 +32,15 @@ InstallPage::InstallPage(QWidget *parent)
     labelOut->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
     connect(&Task::task, &Task::updateProgress,[=](size_t now, size_t count, const QString& message){
-        progressBar->setMaximum(int(count));
-        progressBar->setValue(int(now));
+        m_count = count;
+        m_now = now;
         out = message;
     });
     auto *timer = new QTimer;
     timer->setInterval(100);
     connect(timer,&QTimer::timeout,[=](){
+        progressBar->setMaximum(1000);
+        progressBar->setValue(m_now*1000/m_count);
         labelOut->setText(out);
     });
     timer->start();

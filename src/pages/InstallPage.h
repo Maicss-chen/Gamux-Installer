@@ -23,6 +23,7 @@ private:
     QLabel *labelOut;
     QThread *installThread;
     QString out;
+    long m_count, m_now;
 };
 
 
