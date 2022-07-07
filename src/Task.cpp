@@ -12,6 +12,7 @@
 #include <QJsonArray>
 #include <QStandardPaths>
 #include <QTextStream>
+#include <QThread>
 
 #include "Task.h"
 #include "utils.h"
@@ -95,6 +96,7 @@ void Task::install() {
     uninstall_script.close();
     emit updateProgress(1, 1, "安装完成");
     emit success();
+    QThread::currentThread()->exit(0);
 }
 
 bool Task::loadConfigFile(const QString& file, long tarSize) {
@@ -126,6 +128,17 @@ bool Task::loadConfigFile(const QString& file, long tarSize) {
             flag = true;
         }
     }
+
+    cout<<"Current cpu architecture: "<<arch.toStdString()<<endl;
+    cout<<"=========config===========\n"
+        <<"name: "<< config.name.toStdString()<<endl
+        <<"version: "<< config.version.toStdString()<<endl
+        <<"packageName: "<< config.packageName.toStdString()<<endl
+        <<"desktopFile: "<< config.desktopFile.toStdString()<<endl
+        <<"game: "<< config.game.toStdString()<<endl
+        <<"data: "<< config.data.toStdString()<<endl
+        <<"==========================\n";
+
     if (!flag){
         MessageBoxExec("无法安装", "该游戏不支持\""+arch+"\"架构！");
         return false;
@@ -159,14 +172,5 @@ bool Task::loadConfigFile(const QString& file, long tarSize) {
         MessageBoxExec("加载失败", "配置文件错误：packageName配置项为空！");
         return false;
     }
-    cout<<"Current cpu architecture: "<<arch.toStdString()<<endl;
-    cout<<"=========config===========\n"
-        <<"name: "<< config.name.toStdString()<<endl
-        <<"version: "<< config.version.toStdString()<<endl
-        <<"packageName: "<< config.packageName.toStdString()<<endl
-        <<"desktopFile: "<< config.desktopFile.toStdString()<<endl
-        <<"game: "<< config.game.toStdString()<<endl
-        <<"data: "<< config.data.toStdString()<<endl
-        <<"==========================\n";
     return true;
 }

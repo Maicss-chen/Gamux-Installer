@@ -5,10 +5,8 @@
 #include "TarFile.h"
 
 #include <cstring>
-#include <fstream>
 #include <iostream>
 
-#include <QDir>
 #include <QDebug>
 
 #include "utils.h"
@@ -94,15 +92,20 @@ bool TarFile::unpack(const QString& target, const QString& filterPath) {
         mode_t mode;
         sscanf(header->mode, "%o", &mode);
         auto targetFilename = target +"/"+ QString(header->name).right(QString(header->name).length()-filterPath.length());
-        qDebug()<<targetFilename;
         FILE *outFile;
         char* content;
-        switch (header->typeflag) {
-            case REGTYPE: // intentionally dropping through
-            case AREGTYPE:
-                // normal file
-                if (QString(header->name).left(filterPath.length()) == filterPath){
+        if (QString(header->name).left(filterPath.length()) == filterPath){
+            switch (header->typeflag) {
+                case REGTYPE: // intentionally dropping through
+                case AREGTYPE:
+                    // normal file
                     outFile = fopen(targetFilename.toStdString().c_str() , "w+");
+                    if (outFile == nullptr) {
+                        qDebug()<<header->name;
+                        qDebug()<<targetFilename;
+                        qDebug()<<filterPath;
+                        break;
+                    }
                     content = new char[file_size];
                     fread(content, file_size,1,file);
                     for (int i = 0; i < file_size; ++i) {
@@ -112,32 +115,32 @@ bool TarFile::unpack(const QString& target, const QString& filterPath) {
                     fflush(outFile);
                     fclose(outFile);
                     chmod(targetFilename.toStdString().c_str(), mode);
-                }
-                break;
-            case LNKTYPE:
-                // hard link
-                break;
-            case SYMTYPE:
-                // symbolic link
-                symlink(header->linkname,targetFilename.toStdString().c_str());
-                break;
-            case CHRTYPE:
-                // device file/special file
-                break;
-            case BLKTYPE:
-                // block device
-                break;
-            case DIRTYPE:
-                mkdirP(targetFilename);
-                // directory
-                break;
-            case FIFOTYPE:
-                // named pipe
-                break;
-            case CONTTYPE:
-                break;
-            default:
-                break;
+                    break;
+                case LNKTYPE:
+                    // hard link
+                    break;
+                case SYMTYPE:
+                    // symbolic link
+                    symlink(header->linkname,targetFilename.toStdString().c_str());
+                    break;
+                case CHRTYPE:
+                    // device file/special file
+                    break;
+                case BLKTYPE:
+                    // block device
+                    break;
+                case DIRTYPE:
+                    mkdirP(targetFilename);
+                    // directory
+                    break;
+                case FIFOTYPE:
+                    // named pipe
+                    break;
+                case CONTTYPE:
+                    break;
+                default:
+                    break;
+            }
         }
         pos += file_block_count * block_size;
         fseek(file, pos, SEEK_SET);
