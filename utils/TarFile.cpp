@@ -71,24 +71,41 @@ bool TarFile::unpack(const QString& target, const QString& filterPath) {
     unsigned char buf[block_size];
     auto* header = (posix_header*)buf;
     memset(buf, 0, block_size);
+    char longFilename[PATH_MAX];
 
     size_t pos{ unsigned (offset) };
     size_t now = 0;
     fseek(file, offset, SEEK_SET);
     while (true) {
+        char filename[100];
+        char prefix[155];
+        size_t file_size{0};
+        mode_t mode;
+
+        // 发射信号，传递进度信息
         now++;
         emit progressReady(now,header->name);
+
         size_t read_size = fread(buf, block_size, 1, file);
         if (read_size != 1) break;
         if (strncmp(header->magic, TMAGIC, 5) != 0) break;
         pos += block_size;
-        size_t file_size{0};
+
         sscanf(header->size, "%lo", &file_size);
         size_t file_block_count = (file_size + block_size - 1) / block_size;
-        mode_t mode;
         sscanf(header->mode, "%o", &mode);
-        QString fname = QString(header->prefix) + QString(header->name);
-        auto targetFilename = target +"/"+ QString(fname).right(QString(fname).length()-filterPath.length());
+        memcpy(filename, header->name, 100);
+        memcpy(prefix, header->prefix,155);
+
+        QString fname;
+        if (longFilename[0] != 0) {
+            fname = longFilename;
+            memset(longFilename, 0, PATH_MAX);
+        } else {
+            fname = QString(prefix) + QString(filename);
+        }
+
+        auto targetFilename = target +"/"+ fname.right(fname.length()-filterPath.length());
         FILE *outFile;
         char* content;
         if (QString(header->name).left(filterPath.length()) == filterPath){
@@ -137,6 +154,9 @@ bool TarFile::unpack(const QString& target, const QString& filterPath) {
 //                    break;
                 case XHDTYPE:
                     qDebug()<<header->name;
+                    break;
+                case GNUTYPE_LONGNAME:
+                    fread(longFilename, file_size,1,file);
                     break;
                 default:
                     qDebug()<<targetFilename << header->typeflag;

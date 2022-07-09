@@ -13,7 +13,9 @@ set(SOURCE
         MainWindow.ui
         ${CMAKE_SOURCE_DIR}/utils/utils.cpp
         ${CMAKE_SOURCE_DIR}/utils/utils.h
-        )
+        ${CMAKE_SOURCE_DIR}/utils/TarFile.cpp
+        ${CMAKE_SOURCE_DIR}/utils/TarFile.h
+        ../../utils/tar.h)
 include_directories(${CMAKE_SOURCE_DIR}/utils)
 find_package(Qt5 COMPONENTS
         Core
