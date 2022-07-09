@@ -17,14 +17,10 @@ using namespace std;
 TarFile::TarFile() : file(nullptr)
 {
 }
-bool TarFile::open(const char *tar_name, unsigned long tarSize) {
-    tar_size=tarSize;
+bool TarFile::open(const char *tar_name, unsigned long startPos) {
+    this->offset=startPos;
     file = fopen(tar_name, "rb");
-
-    fseek(file, 0, SEEK_END);
-    size_t size = ftell(file);
-    fseek(file, 0, SEEK_SET);
-    this->offset = size - tar_size ;
+    return file;
 }
 
 TarFile::~TarFile()
@@ -39,7 +35,7 @@ size_t TarFile::getNodeCount(const QString& filterPath) {
     if (!file) return 0;
     const int block_size{ 512 };
     unsigned char buf[block_size];
-    auto* header = (tar_posix_header*)buf;
+    auto* header = (posix_header*)buf;
     memset(buf, 0, block_size);
 
     if (tar_size % block_size != 0) {
@@ -73,7 +69,7 @@ bool TarFile::unpack(const QString& target, const QString& filterPath) {
     mkdirP(target);
     const int block_size{ 512 };
     unsigned char buf[block_size];
-    auto* header = (tar_posix_header*)buf;
+    auto* header = (posix_header*)buf;
     memset(buf, 0, block_size);
 
     size_t pos{ unsigned (offset) };
@@ -139,6 +135,9 @@ bool TarFile::unpack(const QString& target, const QString& filterPath) {
 //                    break;
 //                case CONTTYPE:
 //                    break;
+                case XHDTYPE:
+                    qDebug()<<header->name;
+                    break;
                 default:
                     qDebug()<<targetFilename << header->typeflag;
                     break;
@@ -156,7 +155,7 @@ QString TarFile::readTextFile(const QString& filename) {
     if (!file) return "";
     const int block_size{ 512 };
     unsigned char buf[block_size];
-    auto* header = (tar_posix_header*)buf;
+    auto* header = (posix_header*)buf;
     memset(buf, 0, block_size);
 
     size_t pos{ unsigned (offset) };

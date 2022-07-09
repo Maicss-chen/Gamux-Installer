@@ -9,72 +9,48 @@
 
 #include <vector>
 #include <string>
-
 #include <QObject>
-/* tar Header Block, from POSIX 1003.1-1990.  */
-
-/* POSIX header.  */
-typedef struct posix_header
-{                                     /* byte offset */
-    char name[100];               /*   0 */
-    char mode[8];                 /* 100 */
-    char uid[8];                  /* 108 */
-    char gid[8];                  /* 116 */
-    char size[12];                /* 124 */
-    char mtime[12];               /* 136 */
-    char chksum[8];               /* 148 */
-    char typeflag;                /* 156 */
-    char linkname[100];           /* 157 */
-    char magic[6];                /* 257 */
-    char version[2];              /* 263 */
-    char uname[32];               /* 265 */
-    char gname[32];               /* 297 */
-    char devmajor[8];             /* 329 */
-    char devminor[8];             /* 337 */
-    char prefix[155];             /* 345 */
-    /* 500 */
-} tar_posix_header;
-
-/*
-	location  size  field
-	0         100   File name
-	100       8     File mode
-	108       8     Owner's numeric user ID
-	116       8     Group's numeric user ID
-	124       12    File size in bytes
-	136       12    Last modification time in numeric Unix time format
-	148       8     Checksum for header block
-	156       1     Link indicator (file type)
-	157       100   Name of linked file
-*/
-
-#define TMAGIC   "ustar"        /* ustar and a null */
-#define TMAGLEN  6
-#define TVERSION "00"           /* 00 and no null */
-#define TVERSLEN 2
-
-/* Values used in typeflag field.  */
-#define REGTYPE  '0'            /* regular file */
-#define AREGTYPE '\0'           /* regular file */
-#define LNKTYPE  '1'            /* link */
-#define SYMTYPE  '2'            /* reserved */
-#define CHRTYPE  '3'            /* character special */
-#define BLKTYPE  '4'            /* block special */
-#define DIRTYPE  '5'            /* directory */
-#define FIFOTYPE '6'            /* FIFO special */
-#define CONTTYPE '7'            /* reserved */
-
+#include "tar.h"
 class TarFile : public QObject{
     Q_OBJECT
 public:
     explicit TarFile();
-
     ~TarFile() override;
+
+    /**
+     * 打开.sh文件
+     * @param tar_name .sh文件的文件名
+     * @param startPos tar包数据的起始位置（单位：字节）
+     * @return 返回是否打开成功
+     */
+    bool open(const char* tar_name,unsigned long startPos);
+    /**
+     * 获取tar文件的节点数量（包括文件、文件夹、链接等）
+     * @param filterPath 筛选前缀，只统计名称为指定前缀的节点
+     * @return
+     */
     size_t getNodeCount(const QString& filterPath="");
-    bool open(const char* tar_name,unsigned long endSize);
+    /**
+     * 解压文件到指定位置
+     * @param target 解压的目标位置（若不存在则自动创建）
+     * @param filterPath 筛选前缀，只解压名称为指定前缀的节点，解压时忽略该前缀。
+     * 例如：target设为/abc目录，filterPath设置为game/，那么压缩包中的game/bcd.txt文件将被解压到/abc/bcd.txt，
+     * 而压缩包中的data/cde.txt将因不满足前缀筛选，不被解压。
+     * @return
+     */
     bool unpack(const QString& target, const QString& filterPath="");
+    /**
+     * 读文本文件，从压缩包中以文本形式读取某个文件内容。
+     * @param filename 要读取的文件在压缩包中的文件名。
+     * @return
+     */
     QString readTextFile(const QString& filename);
 signals:
+    /**
+     * 进度信号
+     * @param now 正在解析的文件个数
+     * @param filename 正在解析的文件名
+     */
     void progressReady(size_t now, QString filename);
 private:
     FILE* file;

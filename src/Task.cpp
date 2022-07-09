@@ -99,9 +99,20 @@ void Task::install() {
     QThread::currentThread()->exit(0);
 }
 
-bool Task::loadConfigFile(const QString& file, long tarSize) {
+bool Task::loadConfigFile(const QString& file, long tarStartLine) {
+    QFile f(file);
+    f.open(QFile::ReadOnly | QFile::Text);
+    long startPos = 0;
+    int a = 0;
+    while (!f.atEnd()){
+        if (a++ == tarStartLine) {
+            break;
+        }
+        QByteArray line = f.readLine();
+        startPos += line.size() ;
+    }
     tarFile = new TarFile;
-    tarFile->open(file.toStdString().c_str(),tarSize);
+    tarFile->open(file.toStdString().c_str(), startPos);
     QString configContent = tarFile->readTextFile("config.json");
     if (configContent.isEmpty()){
         MessageBoxExec("加载失败", "配置文件错误：没有找到配置文件");

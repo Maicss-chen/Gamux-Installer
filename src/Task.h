@@ -26,7 +26,7 @@ public slots:
     void setAddDesktopIcon(bool add);
     void serAddLauncherIcon(bool add);
     void install();
-    bool loadConfigFile(const QString& file, long tarSize);
+    bool loadConfigFile(const QString& file, long tarStartLine);
 
 public:
     static Task task;

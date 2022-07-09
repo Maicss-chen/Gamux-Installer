@@ -18,7 +18,8 @@ set(SOURCE
         pages/InstallPage.cpp
         pages/InstallPage.h
         Task.cpp
-        Task.h)
+        Task.h
+        ../utils/tar.h)
 include_directories(${CMAKE_SOURCE_DIR}/utils)
 
 set(CMAKE_CXX_STANDARD 14)

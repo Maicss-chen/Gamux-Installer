@@ -14,7 +14,7 @@ make
 
 ```shell
 cd src
-./gamux-installer <配置文件名>
+./gamux-installer <.sh文件> <tar数据开始位置>
 ```
 
 ## 配置文件示例
@@ -24,14 +24,15 @@ cd src
   "name": "Gamux",
   "version": "1.0",
   "desktopFile": "cn.linuxgame.desktop",
+  "packageName": "linuxgame",
   "data": "data",
   "game": [
     {
-      "path": "game_x86",
+      "path": "game_x86.tar",
       "arch": "x86_64"
     },
     {
-      "path": "game_arm",
+      "path": "game_arm.tar",
       "arch": "arm64"
     },
     {
@@ -39,13 +40,14 @@ cd src
       "arch": "loongarch64"
     }
   ],
-  "readme": "README.txt"
+  "readme": "安装包第一页显示的内容，可以展示用户协议等。"
 }
 ```
 
 - name: 游戏名，将显示在安装器标题栏上
 - version： 版本号，同游戏名显示在标题栏上
 - desktopFile: desktop文件路径
+- packageName: 包名，安装时的desktop文件名和安装默认目录名称都设为此字段值
 - data：游戏数据目录路径
 - game（数组）：游戏程序目录
   - path：游戏程序目录路径
@@ -71,3 +73,5 @@ Categories=Game;
 Terminal=false
 StartupNotify=true
 ```
+
+[tar包解析原理](doc/tar.md)
