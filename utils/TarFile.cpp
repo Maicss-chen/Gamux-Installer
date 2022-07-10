@@ -72,6 +72,7 @@ bool TarFile::unpack(const QString& target, const QString& filterPath) {
     auto* header = (posix_header*)buf;
     memset(buf, 0, block_size);
     char longFilename[PATH_MAX];
+    char targetfn[PATH_MAX];
 
     size_t pos{ unsigned (offset) };
     size_t now = 0;
@@ -96,79 +97,70 @@ bool TarFile::unpack(const QString& target, const QString& filterPath) {
         sscanf(header->mode, "%o", &mode);
         memcpy(filename, header->name, 100);
         memcpy(prefix, header->prefix,155);
+        memset(targetfn, 0, PATH_MAX);
+        strcpy(targetfn,target.toStdString().c_str());
+        strcat(targetfn,"/");
 
         QString fname;
         if (longFilename[0] != 0) {
             fname = longFilename;
+            strcat(targetfn,&longFilename[filterPath.length()]);
             memset(longFilename, 0, PATH_MAX);
         } else {
             fname = QString(prefix) + QString(filename);
+            char name[PATH_MAX];
+            memset(name,0,PATH_MAX);
+            strcat(name,prefix);
+            strcat(name,filename);
+            strcat(targetfn,&name[filterPath.length()]);
+            qDebug()<<targetfn;
         }
 
-        auto targetFilename = target +"/"+ fname.right(fname.length()-filterPath.length());
         FILE *outFile;
         char* content;
-        if (QString(header->name).left(filterPath.length()) == filterPath){
-            switch (header->typeflag) {
-                case REGTYPE: // intentionally dropping through
-                case AREGTYPE:
-                    // normal file
-                    outFile = fopen(targetFilename.toStdString().c_str() , "w+");
-                    if (outFile == nullptr) {
-                        qDebug()<<header->name;
-                        qDebug()<<targetFilename;
-                        qDebug()<<filterPath;
-                        break;
-                    }
-                    content = new char[file_size];
-                    fread(content, file_size,1,file);
-                    fwrite(content,file_size,1,outFile);
-                    delete content;
-                    fflush(outFile);
-                    fclose(outFile);
-                    chmod(targetFilename.toStdString().c_str(), mode);
+        switch (header->typeflag) {
+            case REGTYPE: // intentionally dropping through
+            case AREGTYPE:
+                if (fname.left(filterPath.length()) != filterPath) break;
+                // normal file
+                outFile = fopen(targetfn , "w");
+                if (outFile == nullptr) {
+                    qDebug()<<targetfn;
+                    qDebug()<<filterPath;
                     break;
-//                case LNKTYPE:
-//                    // hard link
-//                    break;
-                case SYMTYPE:
-                    // symbolic link
-                    symlink(header->linkname,targetFilename.toStdString().c_str());
-                    break;
-//                case CHRTYPE:
-//                    // device file/special file
-//                    break;
-//                case BLKTYPE:
-//                    // block device
-//                    break;
-                case DIRTYPE:
-                    mkdirP(targetFilename);
-                    // directory
-                    break;
-//                case FIFOTYPE:
-//                    // named pipe
-//                    break;
-//                case CONTTYPE:
-//                    break;
-                case XHDTYPE:
-                    qDebug()<<header->name;
-                    break;
-                case GNUTYPE_LONGNAME:
-                    fread(longFilename, file_size,1,file);
-                    break;
-                default:
-                    qDebug()<<targetFilename << header->typeflag;
-                    break;
-            }
+                }
+                content = new char[file_size];
+                fread(content, file_size,1,file);
+                fwrite(content,file_size,1,outFile);
+                delete content;
+                fflush(outFile);
+                fclose(outFile);
+                chmod(targetfn, mode);
+                break;
+            case SYMTYPE:
+                // symbolic link
+                if (fname.left(filterPath.length()) != filterPath) break;
+                symlink(header->linkname,targetfn);
+                break;
+            case DIRTYPE:
+                if (fname.left(filterPath.length()) != filterPath) break;
+                mkdirP(targetfn);
+                // directory
+                break;
+            case GNUTYPE_LONGNAME:
+                fread(longFilename, file_block_count * block_size,1,file);
+                break;
+            default:
+                qDebug()<<targetfn << header->typeflag;
+                break;
         }
         pos += file_block_count * block_size;
         fseek(file, pos, SEEK_SET);
     }
-    fseek(file, offset, SEEK_SET);
 
+    fseek(file, offset, SEEK_SET);
     return true;
 }
-
 QString TarFile::readTextFile(const QString& filename) {
     if (!file) return "";
     const int block_size{ 512 };
