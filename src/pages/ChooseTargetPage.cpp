@@ -63,6 +63,12 @@ void ChooseTargetPage::updateData() {
 void ChooseTargetPage::checkPath() {
     err_tip->setText("");
     QString dir = lineEdit->text();
+
+    QDir qDir(dir);
+    if (qDir.exists() && !qDir.isEmpty()){
+        err_tip->setText("警告：您选择的目录不为空，为了防止数据丢失，通常我们建议您选择一个空目录，若您的确想覆盖安装，可以直接点击下一步。");
+    }
+
     QString validPath = getValidParentPath(dir);
     struct stat buf{};
     stat(validPath.toStdString().c_str(),&buf);
@@ -85,4 +91,5 @@ void ChooseTargetPage::checkPath() {
     if (dir.left(4) == "/tmp") {
         err_tip->setText("错误：建议您不要将游戏安装在临时目录，否则将在重启后丢失。");
     }
+
 }
