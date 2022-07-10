@@ -54,10 +54,12 @@ size_t TarFile::getNodeCount(const QString& filterPath) {
         size_t file_size{0};
         sscanf(header->size, "%lo", &file_size);
         size_t file_block_count = (file_size + block_size - 1) / block_size;
-        pos += file_block_count * block_size;
-        if (QString(header->name).left(filterPath.length()) == filterPath){
-            res++;
+        if (header->typeflag == REGTYPE || header->typeflag == AREGTYPE){
+            if (QString(header->name).left(filterPath.length()) == filterPath){
+                res++;
+            }
         }
+        pos += file_block_count * block_size;
         fseek(file, pos, SEEK_SET);
     }
     fseek(file, offset, SEEK_SET);
@@ -82,10 +84,6 @@ bool TarFile::unpack(const QString& target, const QString& filterPath) {
         char prefix[155];
         size_t file_size{0};
         mode_t mode;
-
-        // 发射信号，传递进度信息
-        now++;
-        emit progressReady(now,header->name);
 
         size_t read_size = fread(buf, block_size, 1, file);
         if (read_size != 1) break;
@@ -123,6 +121,9 @@ bool TarFile::unpack(const QString& target, const QString& filterPath) {
             case AREGTYPE:
                 if (fname.left(filterPath.length()) != filterPath) break;
                 // normal file
+                now++;
+                // 发射信号，传递进度信息
+                emit progressReady(now,header->name);
                 outFile = fopen(targetfn , "w");
                 if (outFile == nullptr) {
                     qDebug()<<targetfn;
