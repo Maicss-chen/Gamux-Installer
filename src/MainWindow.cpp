@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     , m_optionsPage(new OptionsPage(m_stk))
     , m_installPage(new InstallPage(m_stk))
 {
-    setWindowTitle(Task::task.config.name+" ("+Task::task.config.version+")");
+    setWindowTitle(Task::task.config.name+" ("+Task::task.config.version+") 安装");
     setFixedSize(600,400);
 
     setCentralWidget(m_stk);
