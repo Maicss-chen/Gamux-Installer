@@ -122,9 +122,7 @@ bool TarFile::unpack(const QString& target, const QString& filterPath) {
                     }
                     content = new char[file_size];
                     fread(content, file_size,1,file);
-                    for (int i = 0; i < file_size; ++i) {
-                        fputc(content[i],outFile);
-                    }
+                    fwrite(content,file_size,1,outFile);
                     delete content;
                     fflush(outFile);
                     fclose(outFile);
