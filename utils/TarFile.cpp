@@ -123,7 +123,7 @@ bool TarFile::unpack(const QString& target, const QString& filterPath) {
                 // normal file
                 now++;
                 // 发射信号，传递进度信息
-                emit progressReady(now,header->name);
+                emit progressReady(now,targetfn);
                 outFile = fopen(targetfn , "w");
                 if (outFile == nullptr) {
                     qDebug()<<targetfn;
