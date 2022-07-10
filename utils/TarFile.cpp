@@ -111,7 +111,6 @@ bool TarFile::unpack(const QString& target, const QString& filterPath) {
             strcat(name,prefix);
             strcat(name,filename);
             strcat(targetfn,&name[filterPath.length()]);
-            qDebug()<<targetfn;
         }
 
         FILE *outFile;
