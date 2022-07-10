@@ -33,5 +33,6 @@ void lsDir(QString, QVector<Entry> *, QString front, Category category);
 QString getMd5(QString path);
 QString chooseDirectory();
 QString chooseFile(QString filter);
+QString getValidParentPath(QString path);
 
 #endif //GAMEINSTALLER_UTILS_H

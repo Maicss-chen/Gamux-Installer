@@ -15,9 +15,12 @@ public:
     ChooseTargetPage(QWidget *parent = nullptr);
     void showed() override;
     void updateData() override;
+public slots:
+    void checkPath();
 private:
     QLineEdit *lineEdit;
     QPushButton *openChooser;
+    QLabel *err_tip;
 };
 
 

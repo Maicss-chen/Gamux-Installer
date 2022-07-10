@@ -34,7 +34,6 @@ bool mkdirP(QString path) {
         return true;
     }
     QVector<QString> paths;
-//    paths.push_back(path);
     do {
         paths.push_front(path);
         path = getDirPath(path);
@@ -80,4 +79,20 @@ QString chooseDirectory() {
 
 QString chooseFile(QString filter) {
     return QFileDialog::getOpenFileName(nullptr,"",HomeDir(),filter);
+}
+
+QString getValidParentPath(QString path) {
+    QFileInfo info(path);
+    if (info.exists()){
+        return path;
+    }
+    do {
+        path = getDirPath(path);
+        info.setFile(path);
+        if (path.isEmpty()){
+            return "/";
+        }
+    } while (!info.exists());
+
+    return path;
 }
