@@ -30,6 +30,7 @@ InstallPage::InstallPage(QWidget *parent)
     mainWidget()->setLayout(layout);
 
     labelOut->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    labelOut->setWordWrap(true);
 
     connect(&Task::task, &Task::updateProgress,[=](size_t now, size_t count, const QString& message){
         m_count = count;
