@@ -93,3 +93,17 @@ QString getValidParentPath(QString path) {
 
     return path;
 }
+
+int getFileLineCount(const QString &path) {
+    QFile file(path);
+    if(!file.open(QFile::ReadOnly)){
+        return 0;
+    }
+    int line = 0;
+    while (!file.atEnd()) {
+        file.readLine();
+        line++;
+    }
+    file.close();
+    return line-1;
+}

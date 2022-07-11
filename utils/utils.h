@@ -32,5 +32,6 @@ QString getMd5(const QString& path);
 QString chooseDirectory();
 QString chooseFile(const QString& filter);
 QString getValidParentPath(QString path);
+int getFileLineCount(const QString &path);
 
 #endif //GAMEINSTALLER_UTILS_H

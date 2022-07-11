@@ -108,32 +108,43 @@ void Task::start() {
     QFile readme(config.readmeFilePath);
     readme.copy(workDir.path()+"/README.txt");
 
-    QFile installer_x86_64(config.installer_x86_64);
-    installer_x86_64.copy(workDir.path()+"/installer_x86_64");
-
-    QFile installer_aarch(config.installer_aarch64);
-    installer_aarch.copy(workDir.path()+"/installer_aarch64");
-
     std::string cmd = "cd "+workDir.path().toStdString()+" && tar -cf pkg.tar *";
 
     emit updateProgress(50,100,"资源数据打包");
     system(cmd.c_str());
+
+    workDir.mkdir("installer");
+
+    QFile installer_x86_64(config.installer_x86_64);
+    installer_x86_64.copy(workDir.path()+"/installer/installer_x86_64");
+
+    QFile installer_aarch(config.installer_aarch64);
+    installer_aarch.copy(workDir.path()+"/installer/installer_aarch64");
+
+    cmd = "cd "+workDir.path().toStdString()+"/installer && tar -cf installer.tar *";
+
+    emit updateProgress(50,100,"安装器数据打包");
+    system(cmd.c_str());
+
+    int count = getFileLineCount(workDir.path()+"/installer/installer.tar");
+
     QString script = "#!/bin/bash\n"
-                     "SCRIPT_ROW_COUNT=17 # 这个值务必设置为脚本内容行数-1（不算末尾的空行）\n"
+                     "SCRIPT_ROW_COUNT=19 # 这个值务必设置为最后一行(算空行)的行数\n"
+                     "INSTALL_ROW_COUNT="+QString::number(count)+" # 安装器所占行数\n"
                      "TEMP_DIR=/tmp/Gamux\n"
                      "HOST_ARCH=`uname -m`\n"
+                     "SELF=`realpath $0`\n"
                      "notify-send \"Gamux\" \"正在解压数据，安装器稍后将自动启动\" -t 5000\n"
-                     "line=`wc -l $0 | awk '{print $1}'`\n"
-                     "line=`expr $line - $SCRIPT_ROW_COUNT`\n"
                      "if [ -d \"/tmp/Gamux\" ]; then\n"
                      "    rm -r $TEMP_DIR/*\n"
                      "else\n"
                      "    mkdir $TEMP_DIR\n"
                      "fi\n"
-                     "tail -n $line $0 | tar -xC $TEMP_DIR\n"
+                     "tail -n $((INSTALL_ROW_COUNT+1)) $SELF | tar -xC $TEMP_DIR\n"
                      "cd $TEMP_DIR\n"
-                     "chmod +x ./installer_${HOST_ARCH}\n"
-                     "./installer_${HOST_ARCH} ./config.json\n"
+                     "chmod +x *\n"
+                     "echo \"./installer_${HOST_ARCH} $SELF ${SCRIPT_ROW_COUNT}\"\n"
+                     "./installer_${HOST_ARCH} $SELF ${SCRIPT_ROW_COUNT}\n"
                      "ret=$?\n"
                      "exit $ret\n";
 
@@ -144,10 +155,22 @@ void Task::start() {
     out.open(QFile::WriteOnly | QFile::Append);
     out.write(script.toStdString().c_str());
 
+
     emit updateProgress(50,100,"向目标写入软件包数据");
     QFile tar(workDir.path() +"/pkg.tar");
     tar.open(QFile::ReadOnly);
     out.write(tar.readAll());
+    tar.close();
+
+    emit updateProgress(50,100,"向目标写入安装器");
+    out.write("\n");
+    QFile installer(workDir.path()+"/installer/installer.tar");
+    installer.open(QFile::ReadOnly);
+    out.write(installer.readAll());
+    installer.close();
+
+    out.flush();
+    out.close();
 
     emit updateProgress(100,100,"完成："+outfilename);
 }

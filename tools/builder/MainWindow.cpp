@@ -14,6 +14,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->line_outdir->setText(HomeDir());
+
+    setWindowTitle("Gamux打包器(版本："+QString(VERSION)+")");
+
     connect(ui->btn_start,&QPushButton::clicked,this,&MainWindow::start);
     connect(&task, &Task::updateProgress, [=](int now, int count, QString message){
         ui->progressBar->setValue(now);
