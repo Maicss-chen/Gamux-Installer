@@ -44,7 +44,7 @@ public:
      * @param filename 要读取的文件在压缩包中的文件名。
      * @return
      */
-    QString readTextFile(const QString& filename);
+    QByteArray readFile(const QString& filename);
 signals:
     /**
      * 进度信号

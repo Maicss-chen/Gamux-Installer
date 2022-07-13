@@ -161,7 +161,7 @@ bool TarFile::unpack(const QString& target, const QString& filterPath) {
     fseek(file, offset, SEEK_SET);
     return true;
 }
-QString TarFile::readTextFile(const QString& filename) {
+QByteArray TarFile::readFile(const QString& filename) {
     if (!file) return "";
     const int block_size{ 512 };
     unsigned char buf[block_size];
@@ -186,7 +186,7 @@ QString TarFile::readTextFile(const QString& filename) {
                     content = new char[file_size];
                     fread(content, file_size,1,file);
                     fseek(file, offset, SEEK_SET);
-                    return {content};
+                    return QByteArray::fromRawData(content,file_size);
                 }
             default:
                 break;

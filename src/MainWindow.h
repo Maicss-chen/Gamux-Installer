@@ -8,22 +8,24 @@
 #include <QMainWindow>
 #include <QStackedWidget>
 
-#include "pages/ReadMePage.h"
-#include "pages/ChooseTargetPage.h"
-#include "pages/OptionsPage.h"
 #include "pages/InstallPage.h"
+#include "widgets/GWidget.h"
+#include "widgets/GTitleBar.h"
+#include "widgets/GButton.h"
+#include "pages/MainPage.h"
+#include "widgets/GHeader.h"
 
-class MainWindow : public QMainWindow{
+class MainWindow : public GWidget{
     Q_OBJECT
 public:
     MainWindow(QWidget *parent = nullptr);
 
 private:
     QStackedWidget *m_stk;
-    ReadMePage *m_readMePage;
-    ChooseTargetPage *m_chooseTargetPage;
-    OptionsPage *m_optionsPage;
     InstallPage *m_installPage;
+    GTitleBar *m_titleBar;
+    MainPage *m_mainPage;
+    GHeader *m_header;
 };
 
 

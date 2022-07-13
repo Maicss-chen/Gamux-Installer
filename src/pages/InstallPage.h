@@ -7,22 +7,24 @@
 #include <QProgressBar>
 #include <QTextEdit>
 #include <QThread>
+#include <QLabel>
 
-#include "Page.h"
+#include "../widgets/GButton.h"
+#include "../widgets/GProgressBar.h"
 
-class InstallPage : public Page{
+class InstallPage : public QWidget{
     Q_OBJECT
 public:
     explicit InstallPage(QWidget *parent);
+    void showed();
 signals:
     void startInstall();
 private:
-    void showed() override;
-    void updateData() override;
-    QProgressBar *progressBar;
-    QLabel *labelOut;
+    GProgressBar *progressBar;
+    QLabel *label_tip;
     QThread *installThread;
     QString out;
+    GButton *btn_finish;
     long m_count, m_now;
 };
 

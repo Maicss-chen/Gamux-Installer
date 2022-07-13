@@ -32,7 +32,7 @@ void Task::setAddDesktopIcon(bool add) {
     addDesktopIcon = add;
 }
 
-void Task::serAddLauncherIcon(bool add) {
+void Task::setAddLauncherIcon(bool add) {
     addLauncherIcon = add;
 }
 
@@ -61,7 +61,7 @@ void Task::install() {
     tarFile->unpack(installTargetDir,config.game+"/");
 
     // build desktopfile
-    QString desktopText = tarFile->readTextFile(config.desktopFile);
+    QString desktopText = tarFile->readFile(config.desktopFile);
     desktopText = desktopText.replace("{{target}}",installTargetDir.toStdString().c_str());
     if (addDesktopIcon){;
         QFile desktopFile;
@@ -113,7 +113,7 @@ bool Task::loadConfigFile(const QString& file, long tarStartLine) {
     }
     tarFile = new TarFile;
     tarFile->open(file.toStdString().c_str(), startPos);
-    QString configContent = tarFile->readTextFile("config.json");
+    QString configContent = tarFile->readFile("config.json");
     if (configContent.isEmpty()){
         MessageBoxExec("加载失败", "配置文件错误：没有找到配置文件");
         return false;
@@ -124,7 +124,11 @@ bool Task::loadConfigFile(const QString& file, long tarStartLine) {
 
     auto jsonDoc = QJsonDocument::fromJson(configContent.toUtf8());
     auto obj = jsonDoc.object();
-    config.readme = tarFile->readTextFile(obj.value("readme").toString());
+    config.header = tarFile->readFile(obj.value("header").toString());
+    if (config.header.isEmpty()){
+        MessageBoxExec("打包错误", "封面图加载失败！");
+        return false;
+    }
     config.name = obj.value("name").toString();
     config.packageName = obj.value("packageName").toString();
     config.version = obj.value("version").toString();
@@ -148,6 +152,7 @@ bool Task::loadConfigFile(const QString& file, long tarStartLine) {
         <<"desktopFile: "<< config.desktopFile.toStdString()<<endl
         <<"game: "<< config.game.toStdString()<<endl
         <<"data: "<< config.data.toStdString()<<endl
+        <<"header: "<< obj.value("header").toString().toStdString()<<endl
         <<"==========================\n";
 
     if (!flag){
@@ -163,10 +168,10 @@ bool Task::loadConfigFile(const QString& file, long tarStartLine) {
         MessageBoxExec("加载失败", "配置文件错误：version配置项为空！");
         return false;
     }
-    if (config.readme.isEmpty()) {
-        MessageBoxExec("加载失败", "配置文件错误：readme配置项为空！");
-        return false;
-    }
+//    if (config.readme.isEmpty()) {
+//        MessageBoxExec("加载失败", "配置文件错误：readme配置项为空！");
+//        return false;
+//    }
     if (config.desktopFile.isEmpty()) {
         MessageBoxExec("加载失败", "配置文件错误：desktopFile配置项为空！");
         return false;
@@ -183,5 +188,18 @@ bool Task::loadConfigFile(const QString& file, long tarStartLine) {
         MessageBoxExec("加载失败", "配置文件错误：packageName配置项为空！");
         return false;
     }
+
     return true;
+}
+
+void Task::setHeaderTip(QString tip) {
+    emit headerTipChanged(tip);
+}
+
+void Task::setHeaderPixmap(QPixmap pixmap) {
+    emit headerPixmapChanged(pixmap);
+}
+
+void Task::setCloseButtonEnable(bool enable) {
+    emit closeButtonEnableChanged(enable);
 }
