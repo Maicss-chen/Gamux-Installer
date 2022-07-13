@@ -16,6 +16,8 @@ GTitleBar::GTitleBar(QWidget *parent)
     m_btn_min->setBackgroundColor("#FFE03C");
     m_btn_min->setFixedSize(18,18);
     m_btn_close->setFixedSize(18,18);
+    m_btn_close->setRadius(9);
+    m_btn_min->setRadius(9);
 
     auto *layout = new QHBoxLayout;
     layout->addStretch();

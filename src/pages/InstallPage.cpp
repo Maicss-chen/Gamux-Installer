@@ -34,6 +34,7 @@ InstallPage::InstallPage(QWidget *parent)
     setLayout(layout);
 
     btn_finish->setFixedSize(100,30);
+    btn_finish->setRadius(15);
     btn_finish->setEnabled(false);
 
     label_tip->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);

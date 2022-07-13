@@ -16,6 +16,7 @@ public:
     QColor backgroundColor();
     void setText(QString text);
     QString text();
+    void setRadius(int radius);
 signals:
     void clicked();
 private:
@@ -25,6 +26,7 @@ private:
     QColor m_bgc;
     QString m_text;
     bool m_clickFlag;
+    int m_radius;
 };
 
 

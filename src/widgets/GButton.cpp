@@ -30,11 +30,7 @@ void GButton::paintEvent(QPaintEvent *event) {
     }
     painter.setBrush(bgc);
 
-    if (QWidget::width() == QWidget::height()) {
-        painter.drawEllipse(rect);
-    } else {
-        painter.drawRoundedRect(rect,QWidget::height()/2,QWidget::height()/2);
-    }
+    painter.drawRoundedRect(rect,m_radius,m_radius);
 
     painter.setPen("#ffffff");
     painter.drawText(0,0,QWidget::width(),QWidget::height(),Qt::AlignCenter,text());
@@ -65,5 +61,10 @@ void GButton::mouseReleaseEvent(QMouseEvent *event) {
         emit clicked();
     }
     m_clickFlag = false;
+}
+
+void GButton::setRadius(int radius) {
+    m_radius = radius;
+    update();
 }
 

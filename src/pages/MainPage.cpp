@@ -33,6 +33,9 @@ MainPage::MainPage(QWidget *parent)
     m_btn_install->setFixedSize(100,30);
     m_btn_chooseTarget->setFixedSize(38,30);
     m_btn_chooseTarget->setBackgroundColor("#112030");
+    m_btn_chooseTarget->setRadius(5);
+    m_btn_install->setRadius(15);
+
 
     layout1->addWidget(label1);
     layout1->addWidget(m_line_installTarget);
