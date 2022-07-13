@@ -5,12 +5,12 @@
 #include "MainPage.h"
 #include "../Task.h"
 #include "utils.h"
+#include <unistd.h>
 #include <QLayout>
 #include <QLabel>
 #include <QDir>
 #include <QStackedWidget>
 #include <sys/stat.h>
-#include <csignal>
 #include <QFileDialog>
 #include "InstallPage.h"
 
