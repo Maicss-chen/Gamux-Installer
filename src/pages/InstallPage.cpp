@@ -66,6 +66,7 @@ InstallPage::InstallPage(QWidget *parent)
 
 void InstallPage::showed() {
     Task::task.setCloseButtonEnable(false);
+    Task::task.setHeaderTip("");
     installThread = new QThread(this);
     installThread->start();
 
