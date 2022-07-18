@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>887</width>
-    <height>768</height>
+    <width>706</width>
+    <height>697</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,6 +15,48 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QGroupBox" name="groupBox_4">
+      <property name="title">
+       <string>架构支持</string>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QCheckBox" name="cbx_x86_64">
+         <property name="text">
+          <string>x86_64</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cbx_aarch64">
+         <property name="text">
+          <string>aarch64</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
     <item>
      <widget class="QGroupBox" name="groupBox">
       <property name="title">
@@ -32,26 +74,6 @@
         <widget class="QLineEdit" name="line_aarch64">
          <property name="text">
           <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QCheckBox" name="cbx_x86_64">
-         <property name="text">
-          <string>x86_64</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="cbx_aarch64">
-         <property name="text">
-          <string>aarch64</string>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -88,63 +110,17 @@
          </property>
         </widget>
        </item>
-      </layout>
-     </widget>
-    </item>
-    <item>
-     <widget class="QGroupBox" name="groupBox_4">
-      <property name="title">
-       <string>安装器</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_5">
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="line_installer_x86_64">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="label_10">
+        <widget class="QLabel" name="label_x86_64">
          <property name="text">
           <string>x86_64：</string>
          </property>
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QLabel" name="label_11">
+        <widget class="QLabel" name="label_aarch64">
          <property name="text">
           <string>aarch64：</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QPushButton" name="btn_open_installer_x86_64">
-         <property name="text">
-          <string>选择文件</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="line_installer_aarch64"/>
-       </item>
-       <item row="2" column="2">
-        <widget class="QPushButton" name="btn_open_installer_aarch64">
-         <property name="text">
-          <string>选择文件</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" colspan="3">
-        <widget class="QLabel" name="label_12">
-         <property name="text">
-          <string>请到：https://github.com/Maicss-chen/Gamux-Installer/releases下载对应架构的最新版本的AppImage可执行文件。即使游戏不支持某些架构，这里也应当选择对应架构的安装器。</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -157,34 +133,6 @@
        <string>基本信息</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="6" column="2">
-        <widget class="QPushButton" name="btn_open_readmefile">
-         <property name="text">
-          <string>选择文件</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1" colspan="2">
-        <widget class="QLineEdit" name="line_name">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1" colspan="2">
-        <widget class="QLineEdit" name="line_version">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>desktop文件：</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0" colspan="3">
         <widget class="QLabel" name="label_6">
          <property name="sizePolicy">
@@ -194,7 +142,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>游戏名称和游戏版本随意填，包名应当是英文字符和“.”的组合，desktop文件中应当使用{{target}}代替游戏根目录，Readme文件必须是一个txt文本文件。</string>
+          <string>游戏名称和游戏版本随意填，包名应当是英文字符和“.”的组合，desktop文件中应当使用{{target}}代替游戏根目录。</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -204,10 +152,10 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_3">
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_14">
          <property name="text">
-          <string>游戏版本：</string>
+          <string>图标：</string>
          </property>
         </widget>
        </item>
@@ -218,6 +166,23 @@
          </property>
         </widget>
        </item>
+       <item row="5" column="1">
+        <widget class="QLineEdit" name="line_headimage"/>
+       </item>
+       <item row="1" column="1" colspan="2">
+        <widget class="QLineEdit" name="line_name">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>游戏版本：</string>
+         </property>
+        </widget>
+       </item>
        <item row="3" column="1" colspan="2">
         <widget class="QLineEdit" name="line_packagename">
          <property name="text">
@@ -225,8 +190,15 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
-        <widget class="QLineEdit" name="line_desktopfile">
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_13">
+         <property name="text">
+          <string>封面图（460x215）:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" colspan="2">
+        <widget class="QLineEdit" name="line_version">
          <property name="text">
           <string/>
          </property>
@@ -239,26 +211,22 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Readme文件：</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QLineEdit" name="line_readmefile">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
        <item row="5" column="2">
-        <widget class="QPushButton" name="btn_open_desktopfile">
+        <widget class="QPushButton" name="btn_open_headimage">
          <property name="text">
-          <string>选择文件</string>
+          <string>选择图片</string>
          </property>
         </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QPushButton" name="btn_open_icon">
+         <property name="text">
+          <string>打开图标</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="line_icon"/>
        </item>
       </layout>
      </widget>
@@ -269,22 +237,22 @@
        <string>输出</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_4">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_8">
-         <property name="text">
-          <string>输出到文件夹：</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="line_outdir"/>
-       </item>
        <item row="0" column="2">
         <widget class="QPushButton" name="pushButton">
          <property name="text">
           <string>选择目录</string>
          </property>
         </widget>
+       </item>
+       <item row="3" column="1" colspan="2">
+        <widget class="QProgressBar" name="progressBar">
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="line_outdir"/>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="label_9">
@@ -293,10 +261,10 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1" colspan="2">
-        <widget class="QProgressBar" name="progressBar">
-         <property name="value">
-          <number>0</number>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>输出到文件夹：</string>
          </property>
         </widget>
        </item>

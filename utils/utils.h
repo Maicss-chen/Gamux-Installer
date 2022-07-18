@@ -2,11 +2,16 @@
 // Created by maicss on 22-6-24.
 //
 
+#ifndef SERVER_URL
+#define SERVER_URL "http://0.0.0.0:8000/"
+#endif
+
 #ifndef GAMEINSTALLER_UTILS_H
 #define GAMEINSTALLER_UTILS_H
 
 #include <QString>
 #include <QMessageBox>
+
 
 enum FileType {
     NORMAL_FILE,
@@ -33,5 +38,7 @@ QString chooseDirectory();
 QString chooseFile(const QString& filter);
 QString getValidParentPath(QString path);
 int getFileLineCount(const QString &path);
+QString getDataPath();
+QString toEasyReadByteSize(qint64 size);
 
 #endif //GAMEINSTALLER_UTILS_H

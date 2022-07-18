@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(gamux-installer)
-
+set(Qt5_DIR /home/maicss)
+set(CMAKE_PREFIX_PATH /home/maicss)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsized-deallocation")
 add_definitions(-DVERSION="2.0.0")
 add_subdirectory(src)

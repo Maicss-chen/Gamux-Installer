@@ -1,5 +1,5 @@
 #!/bin/bash
-SCRIPT_ROW_COUNT=20 # 这个值务必设置为最后一行(算空行)的行数
+SCRIPT_ROW_COUNT=19 # 这个值务必设置为最后一行(算空行)的行数
 INSTALL_ROW_COUNT=14330 # 安装器所占行数
 TEMP_DIR=/tmp/Gamux
 HOST_ARCH=`uname -m`

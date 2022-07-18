@@ -7,6 +7,7 @@
 
 #include <QMainWindow>
 #include "Task.h"
+#include "CheckFileDialog.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -19,9 +20,11 @@ public:
 public slots:
     void start();
     bool check();
+    void updateUI();
 private:
     Ui::MainWindow *ui;
     Task task;
+    CheckFileDialog *initDialog;
 };
 
 

@@ -6,19 +6,26 @@
 #include "Task.h"
 #include "ui_MainWindow.h"
 #include <QDebug>
-#include <QFileDialog>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , initDialog(new CheckFileDialog("installer_2.0.0.tar", "安装器数据"))
 {
+    if (!initDialog->isSuccess()){
+        qDebug()<<"Init Not Success!";
+        exit(1);
+    }
+
     ui->setupUi(this);
     ui->line_outdir->setText(HomeDir());
 
     setWindowTitle("Gamux打包器(版本："+QString(VERSION)+")");
 
     connect(ui->btn_start,&QPushButton::clicked,this,&MainWindow::start);
-    connect(&task, &Task::updateProgress, [=](int now, int count, QString message){
+    connect(&task, &Task::updateProgress, [=](int now, int count, const QString& message){
         ui->progressBar->setValue(now);
         ui->progressBar->setMaximum(count);
         ui->statusbar->showMessage(message);
@@ -36,30 +43,21 @@ MainWindow::MainWindow(QWidget *parent)
             ui->line_aarch64->setText(dir);
         }
     });
-    connect(ui->btn_open_installer_x86_64,  &QPushButton::clicked,[=](){
-        QString file = chooseFile("");
-        if (!file.isEmpty()){
-            ui->line_installer_x86_64->setText(file);
+    connect(ui->btn_open_icon, &QPushButton::clicked, [=](){
+        QString file = chooseFile("图标文件( *.png | *.svg )");
+        if (!file.isEmpty()) {
+            ui->line_icon->setText(file);
         }
     });
-    connect(ui->btn_open_installer_aarch64,  &QPushButton::clicked,[=](){
-        QString file = chooseFile("");
-        if (!file.isEmpty()){
-            ui->line_installer_aarch64->setText(file);
+    connect(ui->btn_open_headimage, &QPushButton::clicked, [=](){
+        QString file = chooseFile("图片文件( *.png | *.jpg | jpeg )");
+        if (!file.isEmpty()) {
+            ui->line_headimage->setText(file);
         }
     });
-    connect(ui->btn_open_desktopfile,  &QPushButton::clicked,[=](){
-        QString file = chooseFile("快捷方式(*.desktop)");
-        if (!file.isEmpty()){
-            ui->line_desktopfile->setText(file);
-        }
-    });
-    connect(ui->btn_open_readmefile,  &QPushButton::clicked,[=](){
-        QString file = chooseFile("文本文件(*.txt)");
-        if (!file.isEmpty()){
-            ui->line_readmefile->setText(file);
-        }
-    });
+    connect(ui->cbx_x86_64, &QCheckBox::clicked, this, &MainWindow::updateUI);
+    connect(ui->cbx_aarch64, &QCheckBox::clicked, this, &MainWindow::updateUI);
+    updateUI();
 }
 
 MainWindow::~MainWindow() {
@@ -74,10 +72,6 @@ void MainWindow::start() {
     config.name = ui->line_name->text();
     config.version = ui->line_version->text();
     config.packageName = ui->line_packagename->text();
-    config.desktopFilePath = ui->line_desktopfile->text();
-    config.readmeFilePath = ui->line_readmefile->text();
-    config.installer_x86_64 = ui->line_installer_x86_64->text();
-    config.installer_aarch64 = ui->line_installer_aarch64->text();
     config.outDir = ui->line_outdir->text();
     if (ui->cbx_x86_64->isChecked()){
         config.gameDir.append({"x86_64",ui->line_x86_64->text()});
@@ -95,19 +89,11 @@ bool MainWindow::check() {
             MessageBoxExec("警告","请选择x86_64架构的游戏资源文件夹！");
             return false;
         }
-        if (ui->line_installer_x86_64->text().isEmpty()) {
-            MessageBoxExec("警告","请选择x86_64架构的游戏安装器文件！");
-            return false;
-        }
     }
 
     if (ui->cbx_aarch64->isChecked()){
         if (ui->line_aarch64->text().isEmpty()) {
             MessageBoxExec("警告","请选择aarch64架构的游戏资源文件夹！");
-            return false;
-        }
-        if (ui->line_installer_aarch64->text().isEmpty()) {
-            MessageBoxExec("警告","请选择aarch64架构的游戏安装器文件！");
             return false;
         }
     }
@@ -123,17 +109,18 @@ bool MainWindow::check() {
         MessageBoxExec("警告","包名不能为空");
         return false;
     }
-    if (ui->line_desktopfile->text().isEmpty()){
-        MessageBoxExec("警告","请选择desktop文件");
-        return false;
-    }
-    if (ui->line_readmefile->text().isEmpty()){
-        MessageBoxExec("警告","请选择readme文件");
-        return false;
-    }
     if (ui->line_outdir->text().isEmpty()) {
         MessageBoxExec("警告", "请选择输出文件夹");
         return false;
     }
     return true;
+}
+
+void MainWindow::updateUI() {
+    ui->line_aarch64->setHidden(!ui->cbx_aarch64->isChecked());
+    ui->line_x86_64->setHidden(!ui->cbx_x86_64->isChecked());
+    ui->btn_open_aarch64->setHidden(!ui->cbx_aarch64->isChecked());
+    ui->btn_open_x86_64->setHidden(!ui->cbx_x86_64->isChecked());
+    ui->label_aarch64->setHidden(!ui->cbx_aarch64->isChecked());
+    ui->label_x86_64->setHidden(!ui->cbx_x86_64->isChecked());
 }

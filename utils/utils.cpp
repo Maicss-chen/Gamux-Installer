@@ -6,6 +6,7 @@
 #include <QTextStream>
 #include <QFileDialog>
 #include <QCryptographicHash>
+#include <QStandardPaths>
 
 #include "utils.h"
 
@@ -106,4 +107,20 @@ int getFileLineCount(const QString &path) {
     }
     file.close();
     return line-1;
+}
+
+QString getDataPath() {
+    return QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).value(0);
+}
+
+QString toEasyReadByteSize(qint64 size) {
+    if (size < 1024) {
+        return QString::number(size) + "b";
+    } else if (size < 1024 * 1024 ){
+        return QString::number(size/1024) + "Kb";
+    } else if (size < 1024 * 1024 * 1024) {
+        return QString::number(size/1024/1024) + "Mb";
+    } else {
+        return QString::number(size/1024/1024/1024) + "Gb";
+    }
 }
