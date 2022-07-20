@@ -12,16 +12,20 @@ GHeader::GHeader(QWidget *parent)
 
 void GHeader::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
+    QPen pen;
+    pen.setWidth(0);
+    pen.setColor(QColor(255,255,255));
+    painter.setPen(pen);
     painter.drawPixmap(0,0,QWidget::width(),QWidget::height(),m_pixmap);
 
     if (!m_tip.isEmpty()) {
         QLinearGradient linearGradient(0,0,0,QWidget::height());
         linearGradient.setColorAt(0,QColor(0,0,0,0));
         linearGradient.setColorAt(1,QColor(0,0,0,240));
-        painter.setBrush(linearGradient);
-        painter.drawRect(0,0,QWidget::width(),QWidget::height());
+//        painter.setBrush(linearGradient);
+        painter.fillRect(0,0,QWidget::width(),QWidget::height(),linearGradient);
 
-        painter.setPen(QColor(255,255,255));
+
         painter.drawText(0,QWidget::height()/2,QWidget::width(),QWidget::height()/2,
                          Qt::AlignCenter | Qt::TextWordWrap,m_tip);
     }
