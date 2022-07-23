@@ -1,11 +1,13 @@
 
 
 #include <QApplication>
+#include <QLibraryInfo>
 
 #include "MainWindow.h"
 #include "Task.h"
 
 #include <iostream>
+
 using namespace std;
 int main(int argc, char *argv[]) {
     new QApplication(argc,argv);

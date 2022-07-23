@@ -77,6 +77,14 @@ void Task::start() {
         }
     }
 
+    // 复制其他文件
+    emit updateProgress(50,100,"部署其他文件");
+    QFile icon(config.icon);
+    icon.copy(workDir.path()+"/data/icon."+ getExtendNameFromPath(icon.fileName()));
+
+    QFile headerImage(config.headerImage);
+    headerImage.copy(workDir.path()+"/header."+ getExtendNameFromPath(headerImage.fileName()));
+
     // 建立配置文件
     emit updateProgress(50,100,"建立配置文件");
     QJsonObject json_config;
@@ -85,7 +93,8 @@ void Task::start() {
     json_config.insert("packageName", config.packageName);
     json_config.insert("desktopFile", "game.desktop");
     json_config.insert("data","data");
-    json_config.insert("readme","README.txt");
+    json_config.insert("header","header."+getExtendNameFromPath(headerImage.fileName()));
+    json_config.insert("icon","data/icon."+getExtendNameFromPath(icon.fileName()));
     QJsonArray games;
     for (auto i : config.gameDir) {
         QJsonObject game_obj;
@@ -100,17 +109,18 @@ void Task::start() {
     config_file.write(document.toJson());
     config_file.close();
 
-    // 复制其他文件
-    emit updateProgress(50,100,"部署其他文件");
-    QFile desktop(config.desktopFilePath);
-    desktop.copy(workDir.path()+"/game.desktop");
-
-    QFile readme(config.readmeFilePath);
-    readme.copy(workDir.path()+"/README.txt");
-
-    std::string cmd = "cd "+workDir.path().toStdString()+" && tar -cf pkg.tar *";
+    emit updateProgress(50,100,"创建快捷方式");
+    QFile desktop_file(workDir.path()+"/game.desktop");
+    desktop_file.open(QFile::WriteOnly);
+    desktop_file.write(buildDesktopFile({
+        config.name,
+        "{{target}}/icon."+getExtendNameFromPath(icon.fileName()),
+        "{{target}}/AppRun"
+    }).toUtf8());
+    desktop_file.close();
 
     emit updateProgress(50,100,"资源数据打包");
+    std::string cmd = "cd "+workDir.path().toStdString()+" && tar -cf pkg.tar *";
     system(cmd.c_str());
 
     workDir.mkdir("installer");
@@ -121,12 +131,13 @@ void Task::start() {
     QFile installer_aarch(config.installer_aarch64);
     installer_aarch.copy(workDir.path()+"/installer/installer_aarch64");
 
-    cmd = "cd "+workDir.path().toStdString()+"/installer && tar -cf installer.tar *";
+
 
     emit updateProgress(50,100,"安装器数据打包");
+    cmd = "cd "+workDir.path().toStdString()+"/installer && tar -cf installer.tar *";
     system(cmd.c_str());
 
-    int count = getFileLineCount(workDir.path()+"/installer/installer.tar");
+    int count = getFileLineCount(getDataPath()+"/installer_2.0.0.tar");
 
     QString script = "#!/bin/bash\n"
                      "SCRIPT_ROW_COUNT=19 # 这个值务必设置为最后一行(算空行)的行数\n"
@@ -155,7 +166,6 @@ void Task::start() {
     out.open(QFile::WriteOnly | QFile::Append);
     out.write(script.toStdString().c_str());
 
-
     emit updateProgress(50,100,"向目标写入软件包数据");
     QFile tar(workDir.path() +"/pkg.tar");
     tar.open(QFile::ReadOnly);
@@ -164,7 +174,7 @@ void Task::start() {
 
     emit updateProgress(50,100,"向目标写入安装器");
     out.write("\n");
-    QFile installer(workDir.path()+"/installer/installer.tar");
+    QFile installer(getDataPath()+"/installer_2.0.0.tar");
     installer.open(QFile::ReadOnly);
     out.write(installer.readAll());
     installer.close();

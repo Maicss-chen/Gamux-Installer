@@ -28,6 +28,11 @@ struct Entry {
     QString target;
     Category category;
 };
+struct DesktopFile {
+    QString name;
+    QString icon;
+    QString exec;
+};
 QString getDirPath(const QString& filename);
 void lsDir(QString, QVector<Entry> *, QString front, Category category);
 QString HomeDir();
@@ -40,5 +45,7 @@ QString getValidParentPath(QString path);
 int getFileLineCount(const QString &path);
 QString getDataPath();
 QString toEasyReadByteSize(qint64 size);
+QString buildDesktopFile(const DesktopFile& desktop);
+QString getExtendNameFromPath(const QString &path);
 
 #endif //GAMEINSTALLER_UTILS_H

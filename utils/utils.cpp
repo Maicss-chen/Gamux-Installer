@@ -124,3 +124,21 @@ QString toEasyReadByteSize(qint64 size) {
         return QString::number(size/1024/1024/1024) + "Gb";
     }
 }
+
+QString buildDesktopFile(const DesktopFile& desktop) {
+    QString res;
+    res.append("[Desktop Entry]\n");
+    res.append("Name=" + desktop.name + "\n");
+    res.append("Icon=" + desktop.icon + "\n");
+    res.append("Exec=" + desktop.exec + "\n");
+    res.append("Version=1.0\n");
+    res.append("Type=Application\n");
+    res.append("Categories=Games;\n");
+    res.append("Comment=https://www.linuxgame.cn/\n");
+
+    return res;
+}
+
+QString getExtendNameFromPath(const QString &path) {
+    return path.right(path.length() - path.lastIndexOf(".") - 1);
+}

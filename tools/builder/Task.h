@@ -20,8 +20,9 @@ public:
         QString name;
         QString version;
         QString packageName;
-        QString desktopFilePath;
-        QString readmeFilePath;
+        QString icon;
+        QString exec;
+        QString headerImage;
         QString outDir;
         QVector<GameDir> gameDir;
         QString installer_x86_64;

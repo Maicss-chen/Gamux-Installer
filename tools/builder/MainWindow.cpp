@@ -73,6 +73,8 @@ void MainWindow::start() {
     config.version = ui->line_version->text();
     config.packageName = ui->line_packagename->text();
     config.outDir = ui->line_outdir->text();
+    config.icon = ui->line_icon->text();
+    config.headerImage = ui->line_headimage->text();
     if (ui->cbx_x86_64->isChecked()){
         config.gameDir.append({"x86_64",ui->line_x86_64->text()});
     }
