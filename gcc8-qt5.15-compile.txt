@@ -1,0 +1,63 @@
+QMAKE_CXXFLAGS+=-Wno-error QMAKE_FXXLAGS=-no-exceptions ./configure \
+	-confirm-license \
+	-opensource \
+	-release \
+	-optimize-size \
+	-prefix "/opt/qt5.15" \
+	-shared \
+	-c++std c++11 \
+	-silent \
+	-no-compile-examples \
+	-nomake tests \
+	-nomake examples \
+	-qt-doubleconversion \
+	-no-glib \
+	-no-iconv \
+	-qt-pcre \
+	-no-zlib \
+	-no-ssl \
+	-no-openssl \
+	-no-libproxy \
+	-no-cups \
+	-system-freetype \
+	-no-gtk \
+	-no-opengl \
+	-no-vulkan \
+	-qpa xcb \
+	-no-directfb \
+	-no-eglfs \
+	-no-gbm \
+	-no-kms \
+	-no-linuxfb \
+	-xcb \
+	-xcb-xlib \
+	-no-libudev \
+	-no-evdev \
+	-no-libinput \
+	-no-mtdev \
+	-no-tslib \
+	-no-ico \
+	-no-gif \
+	-qt-libpng \
+	-qt-libjpeg \
+	-no-icu \
+	-no-feature-sqlmodel \
+	-no-harfbuzz \
+	-no-feature-texthtmlparser \
+	-no-feature-textodfwriter \
+	-no-feature-textmarkdownreader -no-feature-textmarkdownwriter \
+	-no-feature-sessionmanager \
+	-no-sql-mysql \
+	-no-sql-odbc \
+	-no-sql-tds \
+	-no-sql-psql \
+	-no-sql-sqlite \
+	-no-feature-testlib \
+	-no-feature-sql \
+	-nomake tools \
+	-strip \
+	-ltcg \
+	-no-pch \
+	-fontconfig \
+	-feature-relocatable \
+	-recheck
