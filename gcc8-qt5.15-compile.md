@@ -710,13 +710,34 @@ sqldrivers:
   tds	
 ```
 
-# 编译时调用非系统QT
+# 调用非系统QT
+
+## 编译
 如果不想用仓库中的qt,而想用自己编译的qt,则可使用如下办法
 	
-## cmake
+### cmake
 	
 以下任一方法即可
 ```
 CMAKE_PREFIX_PATH=/Path/To/QtInstallationFolder/ cmake ..
 cmake -DQt5_ROOT=/Path/To/QtInstallationFolder/
+```
+
+## 使用
+
+### 环境变量
+LD_LIBRARY_PATH=/Path/To/QtInstallationFolder/lib/ ./program
+
+### qt.conf（推荐）
+在可执行程序的目录放入一个qt.conf，如果qt5下无效请改名为qt5.conf,qt6无效请改为qt6.conf
+	
+内容示例如下，这些全部是默认值
+
+```
+[Paths]
+Prefix = .（argv[0]的目录）
+Translations = translations
+Libraries = lib
+Plugins = plugins
+Data = .
 ```
