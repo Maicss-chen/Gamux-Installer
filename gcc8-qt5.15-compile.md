@@ -709,3 +709,14 @@ sqldrivers:
   sqlite2
   tds	
 ```
+
+# 编译时调用非系统QT
+如果不想用仓库中的qt,而想用自己编译的qt,则可使用如下办法
+	
+## cmake
+	
+以下任一方法即可
+```
+CMAKE_PREFIX_PATH=/Path/To/QtInstallationFolder/ cmake ..
+cmake -DQt5_ROOT=/Path/To/QtInstallationFolder/
+```
