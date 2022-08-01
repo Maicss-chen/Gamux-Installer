@@ -408,35 +408,35 @@ Database options:
 特性的参数可通过<code>./configure --list-features</code>查询，可定制qt组件的颗粒，例如不编译颜色选择框；通过-feature-<feature> 和-no-feature-<feature>启用和禁用特性。
 
 ```
-	abstractbutton .......... Widgets: Abstract base class of button widgets, providing functionality common to buttons.
-abstractslider .......... Widgets: Common super class for widgets like QScrollBar, QSlider and QDial.
+abstractbutton .......... Widgets: 按钮部件的抽象基类，提供按钮共有的功能。禁用按钮将不会被编译。
+abstractslider .......... Widgets: QScrollBar、QSlider 和 QDial 等小部件的通用超类。禁用后滚动条、进度条和刻度盘部件将不编译。
 accessibility ........... Utilities: Provides accessibility support.
 action .................. Kernel: Provides widget actions.
-animation ............... Utilities: Provides a framework for animations.
+animation ............... Utilities: 动画框架
 appstore-compliant ...... Disables code that is not allowed in platform app stores
 bearermanagement ........ Networking: Provides bearer management for the network stack.
-big_codecs .............. Internationalization: Supports big codecs, e.g. CJK.
+big_codecs .............. Internationalization: 支持大型字符编码，例如CJK（中日韩字符）
 binaryjson .............. Utilities: Provides support for the deprecated binary JSON format.
 buttongroup ............. Widgets: Supports organizing groups of button widgets.
-calendarwidget .......... Widgets: Provides a monthly based calendar widget allowing the user to select a date.
-cborstreamreader ........ Utilities: Provides support for reading the CBOR binary format.
-cborstreamwriter ........ Utilities: Provides support for writing the CBOR binary format.
-checkbox ................ Widgets: Provides a checkbox with a text label.
-clipboard ............... Kernel: Provides cut and paste operations.
-codecs .................. Internationalization: Supports non-unicode text conversions.
-colordialog ............. Dialogs: Provides a dialog widget for specifying colors.
+calendarwidget .......... Widgets: 提供基于月度的日历小部件，用户以选择日期。
+cborstreamreader ........ Utilities: 提供对读取 CBOR 二进制格式的支持。
+cborstreamwriter ........ Utilities: 提供对编写 CBOR 二进制格式的支持。
+checkbox ................ Widgets: 提供带有文本的复选框。
+clipboard ............... Kernel: 提供剪切和粘贴操作。
+codecs .................. Internationalization: 支持非 unicode 文本转换。
+colordialog ............. Dialogs: 提供颜色选择对话框小部件。
 colornames .............. Painting: Supports color names such as "red", used by QColor and by some HTML documents.
 columnview .............. ItemViews: Provides a model/view implementation of a column view.
-combobox ................ Widgets: Provides drop-down boxes presenting a list of options to the user.
-commandlineparser ....... Utilities: Provides support for command line parsing.
+combobox ................ Widgets: 提供下拉框式选项列表。
+commandlineparser ....... Utilities: 提供对命令行解析的支持。
 commandlinkbutton ....... Widgets: Provides a Vista style command link button.
 completer ............... Utilities: Provides completions based on an item model.
 concatenatetablesproxymodel . ItemViews: Supports concatenating source models.
 concurrent .............. Kernel: Provides a high-level multi-threading API.
 contextmenu ............. Widgets: Adds pop-up menus on right mouse click to numerous widgets.
-cssparser ............... Kernel: Provides a parser for Cascading Style Sheets.
-cups .................... Painting: Provides support for the Common Unix Printing System.
-cursor .................. Kernel: Provides mouse cursors.
+cssparser ............... Kernel: CSS解析器。
+cups .................... Painting: 提供对通用 Unix 打印系统的支持。
+cursor .................. Kernel: 鼠标指针支持。
 datawidgetmapper ........ ItemViews: Provides mapping between a section of a data model to widgets.
 datestring .............. Data structures: Provides conversion between dates and strings.
 datetimeedit ............ Widgets: Supports editing dates and times.
@@ -453,15 +453,15 @@ draganddrop ............. Kernel: Supports the drag and drop mechansim.
 dtls .................... Networking: Provides a DTLS implementation
 easingcurve ............. Utilities: Provides easing curve.
 effects ................. Kernel: Provides special widget effects (e.g. fading and scrolling).
-errormessage ............ Dialogs: Provides an error message display dialog.
-filedialog .............. Dialogs: Provides a dialog widget for selecting files or directories.
+errormessage ............ Dialogs: 提供错误消息显示对话框。
+filedialog .............. Dialogs: 文件选择对话框小部件。
 filesystemiterator ...... File I/O: Provides fast file system iteration.
 filesystemmodel ......... File I/O: Provides a data model for the local filesystem.
 filesystemwatcher ....... File I/O: Provides an interface for monitoring files and directories for modifications.
-fontcombobox ............ Widgets: Provides a combobox that lets the user select a font family.
-fontdialog .............. Dialogs: Provides a dialog widget for selecting fonts.
+fontcombobox ............ Widgets: 选择字体系列的组合对话框。
+fontdialog .............. Dialogs: 选择字体的小对话框。
 formlayout .............. Widgets: Manages forms of input widgets and their associated labels.
-freetype ................ Fonts: Supports the FreeType 2 font engine (and its supported font formats).
+freetype ................ Fonts: 支持FreeType2库。
 fscompleter ............. Utilities: Provides file name completion in QFileDialog.
 ftp ..................... Networking: Provides support for the File Transfer Protocol in QNetworkAccessManager.
 future .................. Kernel: Provides QFuture and related classes.
@@ -473,7 +473,7 @@ gssapi .................. Networking: Enable SPNEGO authentication through GSSAP
 highdpiscaling .......... Kernel: Provides automatic scaling of DPI-unaware applications on high-DPI displays.
 hijricalendar ........... Utilities: Generic basis for Islamic calendars, providing shared locale data
 http .................... Networking: Provides support for the Hypertext Transfer Protocol in QNetworkAccessManager.
-iconv ................... Internationalization: Provides internationalization on Unix.
+iconv ................... Internationalization: 提供国际化，unix系统上。
 identityproxymodel ...... ItemViews: Supports proxying a source model unmodified.
 im ...................... Kernel: Provides complex input methods.
 image_heuristic_mask .... Images: Supports creating a 1-bpp heuristic mask for images.
