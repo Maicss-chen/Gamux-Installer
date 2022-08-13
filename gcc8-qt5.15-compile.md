@@ -1,4 +1,12 @@
-# QT5.15编译参数
+# 依赖
+
+debian10的依赖，已在amd64和arm64验证。
+
+```
+sudo apt install libx11-dev libx11-xcb-dev libxext-dev libxfixes-dev libxi-dev libxrender-dev libxcb1-dev libxcb-glx0-dev libxcb-keysyms1-dev libxcb-image0-dev libxcb-shm0-dev libxcb-icccm4-dev libxcb-sync0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-randr0-dev libxcb-render-util0-dev libxcd-xinerama-dev
+```
+
+# QT5.15 base编译参数
 
 配合打包器和安装器的编译参数如下：
 
