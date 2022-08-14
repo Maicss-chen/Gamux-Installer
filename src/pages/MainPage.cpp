@@ -12,6 +12,7 @@
 #include <QStackedWidget>
 #include <sys/stat.h>
 #include <QFileDialog>
+#include <QDesktopServices>
 #include "InstallPage.h"
 
 MainPage::MainPage(QWidget *parent)
@@ -20,6 +21,7 @@ MainPage::MainPage(QWidget *parent)
     , m_cbx_addToDesktop(new QCheckBox("添加至桌面", this))
     , m_cbx_addToLauncher(new QCheckBox("添加至启动器", this))
     , m_cbx_readAndAllow(new QCheckBox("我已阅读并同意", this))
+    , m_btn_readme(new QPushButton("《用户协议》", this))
     , m_line_installTarget(new QLineEdit(this))
 {
     auto *layout = new QVBoxLayout;
@@ -35,6 +37,8 @@ MainPage::MainPage(QWidget *parent)
     m_btn_chooseTarget->setBackgroundColor("#112030");
     m_btn_chooseTarget->setRadius(5);
     m_btn_install->setRadius(15);
+    m_btn_readme->setStyleSheet("color:skyblue; background:none; border:none;");
+    m_btn_readme->setCursor(Qt::PointingHandCursor);
 
 
     layout1->addWidget(label1);
@@ -52,6 +56,7 @@ MainPage::MainPage(QWidget *parent)
     layout->addLayout(layout2);
 
     layout3->addWidget(m_cbx_readAndAllow);
+    layout3->addWidget(m_btn_readme);
     layout3->addStretch();
     layout3->addWidget(m_btn_install);
     layout3->setMargin(0);
@@ -76,6 +81,9 @@ MainPage::MainPage(QWidget *parent)
         if (!dir.isEmpty()) {
             m_line_installTarget->setText(dir+"/"+Task::task.config.packageName);
         }
+    });
+    connect(m_btn_readme, &QPushButton::clicked,[=](){
+       QDesktopServices::openUrl(Task::task.config.readmeUrl);
     });
 
     m_btn_install->setEnabled(false);

@@ -10,6 +10,8 @@
 #include "../widgets/GButton.h"
 #include <QCheckBox>
 #include <QLabel>
+#include <QPushButton>
+
 class MainPage : public QWidget{
     Q_OBJECT
 public:
@@ -24,6 +26,7 @@ private:
     QCheckBox *m_cbx_addToDesktop;
     QCheckBox *m_cbx_readAndAllow;
     GButton *m_btn_install;
+    QPushButton *m_btn_readme;
 };
 
 

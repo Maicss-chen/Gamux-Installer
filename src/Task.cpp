@@ -134,6 +134,7 @@ bool Task::loadConfigFile(const QString& file, long tarStartLine) {
     config.version = obj.value("version").toString();
     config.desktopFile = obj.value("desktopFile").toString();
     config.data = obj.value("data").toString();
+    config.readmeUrl = obj.value("readmeUrl").toString();
     auto gameList = obj.value("game").toArray();
     QString arch = QSysInfo::currentCpuArchitecture();
     bool flag = false;
@@ -186,6 +187,10 @@ bool Task::loadConfigFile(const QString& file, long tarStartLine) {
     }
     if (config.packageName.isEmpty()) {
         MessageBoxExec("加载失败", "配置文件错误：packageName配置项为空！");
+        return false;
+    }
+    if (config.readmeUrl.isEmpty()) {
+        MessageBoxExec("加载失败", "配置文件错误：readmeUrl配置项为空！");
         return false;
     }
 
