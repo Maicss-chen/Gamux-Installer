@@ -12,7 +12,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , initDialog(new CheckFileDialog("installer_2.0.0.tar", "安装器数据"))
+    , initDialog(new CheckFileDialog("installer_"+QString(VERSION)+".tar", "安装器数据"))
 {
     if (!initDialog->isSuccess()){
         qDebug()<<"Init Not Success!";

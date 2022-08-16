@@ -137,7 +137,7 @@ void Task::start() {
     cmd = "cd "+workDir.path().toStdString()+"/installer && tar -cf installer.tar *";
     system(cmd.c_str());
 
-    int count = getFileLineCount(getDataPath()+"/installer_2.0.0.tar");
+    int count = getFileLineCount(getDataPath()+"/installer_"+QString(VERSION)+".tar");
 
     QString script = "#!/bin/bash\n"
                      "SCRIPT_ROW_COUNT=19 # 这个值务必设置为最后一行(算空行)的行数\n"
