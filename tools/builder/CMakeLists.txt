@@ -15,7 +15,12 @@ set(SOURCE
         ${CMAKE_SOURCE_DIR}/utils/utils.h
         ${CMAKE_SOURCE_DIR}/utils/TarFile.cpp
         ${CMAKE_SOURCE_DIR}/utils/TarFile.h
-        ../../utils/tar.h CheckFileDialog.cpp CheckFileDialog.h)
+        ${CMAKE_SOURCE_DIR}/utils/tar.h
+        CheckFileDialog.cpp
+        CheckFileDialog.h
+        ChooseSourceDialog.ui
+        ChooseSourceDialog.cpp
+        ChooseSourceDialog.h)
 
 include_directories(${CMAKE_SOURCE_DIR}/utils)
 find_package(Qt5 COMPONENTS

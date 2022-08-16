@@ -10,15 +10,16 @@
 #include <QFile>
 #include <QTimer>
 #include <QApplication>
-CheckFileDialog::CheckFileDialog(const QString &filename, const QString &name, QWidget *parent)
+#include <utility>
+CheckFileDialog::CheckFileDialog(QString filename, QString name, QWidget *parent)
     : m_progressBar(new QProgressBar)
     , m_label(new QLabel)
     , m_label_2(new QLabel)
     , networkAccessManager(new QNetworkAccessManager)
     , timer(new QTimer)
     , m_isSuccess(true)
-    , m_filename(filename)
-    , m_name(name)
+    , m_filename(std::move(filename))
+    , m_name(std::move(name))
 {
     QLayout *layout = new QVBoxLayout;
     m_label->setText("正在检查"+m_name);
@@ -38,7 +39,6 @@ CheckFileDialog::CheckFileDialog(const QString &filename, const QString &name, Q
             m_speed = 0;
         }
     });
-    this->exec();
 }
 
 void CheckFileDialog::checkFile() {
@@ -112,6 +112,6 @@ void CheckFileDialog::setMessage(const QString &message) {
     m_label->setText(message);
 }
 
-bool CheckFileDialog::isSuccess() {
+bool CheckFileDialog::isSuccess() const {
     return m_isSuccess;
 }

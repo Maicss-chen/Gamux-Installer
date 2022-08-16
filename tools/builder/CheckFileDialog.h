@@ -14,8 +14,12 @@
 class CheckFileDialog : public QDialog {
     Q_OBJECT
 public:
-    explicit CheckFileDialog(const QString &filename, const QString &name, QWidget *parent = nullptr);
-    bool isSuccess();
+    explicit CheckFileDialog(QString filename, QString name, QWidget *parent = nullptr);
+    /**
+     * 调用此对话框选择或下载文件后，可用该接口判断操作是否执行成功。
+     * @return 返回是否成功。
+     */
+    bool isSuccess() const;
 private slots:
     void checkFile();
     void updateFile();

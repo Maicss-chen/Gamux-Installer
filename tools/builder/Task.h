@@ -31,12 +31,15 @@ public:
     Task();
     void setConfig(Config c);
     void start();
+    QString installerFile();
+    void setInstallerFile(QString installerFile);
 signals:
     void updateProgress(int now, int count, QString message);
     void failed(QString message);
     void success();
 private:
     Config config;
+    QString m_installerFile;
 };
 
 

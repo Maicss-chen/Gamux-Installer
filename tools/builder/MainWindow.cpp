@@ -6,18 +6,27 @@
 #include "Task.h"
 #include "ui_MainWindow.h"
 #include <QDebug>
-#include <QNetworkAccessManager>
 #include <QNetworkReply>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , initDialog(new CheckFileDialog("installer_"+QString(VERSION)+".tar", "安装器数据"))
+    , chooseSourceDialog(new ChooseSourceDialog())
 {
-    if (!initDialog->isSuccess()){
-        qDebug()<<"Init Not Success!";
+    if(chooseSourceDialog->exec() != QDialog::Accepted) {
         exit(1);
     }
+    if (chooseSourceDialog->getInstallerType() == ChooseSourceDialog::FROM_REPO) {
+        checkFileDialog = new CheckFileDialog("installer_" + QString(VERSION) + ".tar", "安装器数据");
+        checkFileDialog->exec();
+        if (!checkFileDialog->isSuccess()){
+            qDebug()<<"Init Not Success!";
+        }
+        task.setInstallerFile(getDataPath()+"/installer_"+QString(VERSION)+".tar");
+    } else {
+        task.setInstallerFile(chooseSourceDialog->getInstallerPath());
+    }
+
 
     ui->setupUi(this);
     ui->line_outdir->setText(HomeDir());

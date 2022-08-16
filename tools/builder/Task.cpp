@@ -95,8 +95,9 @@ void Task::start() {
     json_config.insert("data","data");
     json_config.insert("header","header."+getExtendNameFromPath(headerImage.fileName()));
     json_config.insert("icon","data/icon."+getExtendNameFromPath(icon.fileName()));
+    json_config.insert("readmeUrl","https://www.linuxgame.cn/donate-gamux-cash");
     QJsonArray games;
-    for (auto i : config.gameDir) {
+    for (const auto& i : config.gameDir) {
         QJsonObject game_obj;
         game_obj.insert("path","game_" + i.arch);
         game_obj.insert("arch",i.arch);
@@ -123,21 +124,7 @@ void Task::start() {
     std::string cmd = "cd "+workDir.path().toStdString()+" && tar -cf pkg.tar *";
     system(cmd.c_str());
 
-    workDir.mkdir("installer");
-
-    QFile installer_x86_64(config.installer_x86_64);
-    installer_x86_64.copy(workDir.path()+"/installer/installer_x86_64");
-
-    QFile installer_aarch(config.installer_aarch64);
-    installer_aarch.copy(workDir.path()+"/installer/installer_aarch64");
-
-
-
-    emit updateProgress(50,100,"安装器数据打包");
-    cmd = "cd "+workDir.path().toStdString()+"/installer && tar -cf installer.tar *";
-    system(cmd.c_str());
-
-    int count = getFileLineCount(getDataPath()+"/installer_"+QString(VERSION)+".tar");
+    int count = getFileLineCount(this->installerFile());
 
     QString script = "#!/bin/bash\n"
                      "SCRIPT_ROW_COUNT=19 # 这个值务必设置为最后一行(算空行)的行数\n"
@@ -183,4 +170,12 @@ void Task::start() {
     out.close();
 
     emit updateProgress(100,100,"完成："+outfilename);
+}
+
+QString Task::installerFile() {
+    return m_installerFile;
+}
+
+void Task::setInstallerFile(QString installerFile) {
+    m_installerFile=std::move(installerFile);
 }
