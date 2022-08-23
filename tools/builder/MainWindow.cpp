@@ -5,8 +5,8 @@
 #include "MainWindow.h"
 #include "Task.h"
 #include "ui_MainWindow.h"
-#include <QDebug>
 #include <QNetworkReply>
+#include <QFileInfo>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -42,15 +42,27 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->btn_open_x86_64,  &QPushButton::clicked,[=](){
         QString dir = chooseDirectory();
-        if (!dir.isEmpty()){
-            ui->line_x86_64->setText(dir);
+        QFileInfo fileInfo(dir+"/AppRun");
+        if (dir.isEmpty()){
+            return;
         }
+        if (!fileInfo.exists()){
+            MessageBoxExec("错误", "您所提供的游戏目录必须存在一个AppRun可执行文件作为游戏入口。");
+            return;
+        }
+        ui->line_x86_64->setText(dir);
     });
     connect(ui->btn_open_aarch64,  &QPushButton::clicked,[=](){
         QString dir = chooseDirectory();
-        if (!dir.isEmpty()){
-            ui->line_aarch64->setText(dir);
+        QFileInfo fileInfo(dir+"/AppRun");
+        if (dir.isEmpty()){
+            return;
         }
+        if (!fileInfo.exists()){
+            MessageBoxExec("错误", "您所提供的游戏目录必须存在一个AppRun可执行文件作为游戏入口。");
+            return;
+        }
+        ui->line_x86_64->setText(dir);
     });
     connect(ui->btn_open_icon, &QPushButton::clicked, [=](){
         QString file = chooseFile("图标文件( *.png | *.svg )");
