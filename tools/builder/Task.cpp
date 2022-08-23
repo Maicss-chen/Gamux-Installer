@@ -161,7 +161,7 @@ void Task::start() {
 
     emit updateProgress(50,100,"向目标写入安装器");
     out.write("\n");
-    QFile installer(getDataPath()+"/installer_2.0.0.tar");
+    QFile installer(installerFile());
     installer.open(QFile::ReadOnly);
     out.write(installer.readAll());
     installer.close();
