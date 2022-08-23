@@ -78,6 +78,8 @@ MainWindow::MainWindow(QWidget *parent)
     });
     connect(ui->cbx_x86_64, &QCheckBox::clicked, this, &MainWindow::updateUI);
     connect(ui->cbx_aarch64, &QCheckBox::clicked, this, &MainWindow::updateUI);
+
+    connect(ui->btn_close, &QCheckBox::clicked, this, &MainWindow::close);
     updateUI();
 }
 
