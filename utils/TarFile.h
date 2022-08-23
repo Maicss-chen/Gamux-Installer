@@ -45,6 +45,12 @@ public:
      * @return
      */
     QByteArray readFile(const QString& filename);
+    /**
+     * 判断包中是否存在某个指定文件
+     * @param filename
+     * @return 返回该文件是否存在
+     */
+    bool exists(const QString& filename);
 signals:
     /**
      * 进度信号

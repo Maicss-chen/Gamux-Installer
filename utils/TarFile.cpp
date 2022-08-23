@@ -198,3 +198,7 @@ QByteArray TarFile::readFile(const QString& filename) {
 
     return "";
 }
+
+bool TarFile::exists(const QString& filename){
+    return readFile(filename) != "";
+}

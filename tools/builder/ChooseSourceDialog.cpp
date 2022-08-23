@@ -5,6 +5,7 @@
 #include "ChooseSourceDialog.h"
 #include "ui_ChooseSourceDialog.h"
 #include "utils.h"
+#include "TarFile.h"
 
 ChooseSourceDialog::ChooseSourceDialog(QWidget *parent)
     : QDialog(parent)
@@ -13,6 +14,13 @@ ChooseSourceDialog::ChooseSourceDialog(QWidget *parent)
     ui->setupUi(this);
     connect(ui->btn_open,  &QPushButton::clicked,[=](){
         QString file = chooseFile("安装器包( *.tar )");
+        TarFile tar;
+        tar.open(file.toUtf8(), 0);
+        QString installerName = "installer_" + QSysInfo::currentCpuArchitecture();
+        if (!tar.exists(installerName)){
+            MessageBoxExec("错误", "您选择的tar包中没有找到安装器("+installerName+")文件。");
+            return;
+        }
         if (!file.isEmpty()){
             ui->line_filePath->setText(file);
         }
