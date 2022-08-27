@@ -7,6 +7,7 @@
 #include "ui_MainWindow.h"
 #include <QNetworkReply>
 #include <QFileInfo>
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -17,12 +18,13 @@ MainWindow::MainWindow(QWidget *parent)
         exit(1);
     }
     if (chooseSourceDialog->getInstallerType() == ChooseSourceDialog::FROM_REPO) {
-        checkFileDialog = new CheckFileDialog("installer_" + QString(VERSION) + ".tar", "安装器数据");
+        checkFileDialog = new CheckFileDialog(QString(VERSION) + "/installer-" + QString(VERSION) + ".tar", "安装器数据");
         checkFileDialog->exec();
         if (!checkFileDialog->isSuccess()){
             qDebug()<<"Init Not Success!";
+            exit(1);
         }
-        task.setInstallerFile(getDataPath()+"/installer_"+QString(VERSION)+".tar");
+        task.setInstallerFile(getDataPath()+"/installer-"+QString(VERSION)+".tar");
     } else {
         task.setInstallerFile(chooseSourceDialog->getInstallerPath());
     }
