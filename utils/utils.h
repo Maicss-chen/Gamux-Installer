@@ -3,7 +3,7 @@
 //
 
 #ifndef SERVER_URL
-#define SERVER_URL "http://0.0.0.0:8000/"
+#define SERVER_URL "http://de.linuxgame.cn/gamux-installer/"
 #endif
 
 #ifndef GAMEINSTALLER_UTILS_H
