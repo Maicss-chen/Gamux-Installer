@@ -7,6 +7,7 @@
 #include "ui_MainWindow.h"
 #include <QNetworkReply>
 #include <QFileInfo>
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
