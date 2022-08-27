@@ -104,7 +104,7 @@ void MainWindow::start() {
         config.gameDir.append({"x86_64",ui->line_x86_64->text()});
     }
     if (ui->cbx_aarch64->isChecked()){
-        config.gameDir.append({"aarch64",ui->line_aarch64->text()});
+        config.gameDir.append({"arm64",ui->line_aarch64->text()});
     }
     task.setConfig(config);
     task.start();
