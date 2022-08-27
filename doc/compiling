@@ -1,6 +1,6 @@
 ## 编译
 
-首先安装debootstrap,然后安装debian10 chroot环境
+首先安装debootstrap（任何发行版都可以，已在debian、ubuntu、manjaro验证）,然后安装debian10 chroot环境
 X86
 ```
 sudo debootstrap --arch amd64 buster /mnt/debian10 http://ftp.cn.debian.org/debian
