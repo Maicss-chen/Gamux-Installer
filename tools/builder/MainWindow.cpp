@@ -64,7 +64,7 @@ MainWindow::MainWindow(QWidget *parent)
             MessageBoxExec("错误", "您所提供的游戏目录必须存在一个AppRun可执行文件作为游戏入口。");
             return;
         }
-        ui->line_x86_64->setText(dir);
+        ui->line_aarch64->setText(dir);
     });
     connect(ui->btn_open_icon, &QPushButton::clicked, [=](){
         QString file = chooseFile("图标文件( *.png | *.svg )");
