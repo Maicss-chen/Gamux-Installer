@@ -25,16 +25,14 @@ ChooseSourceDialog::ChooseSourceDialog(QWidget *parent)
             ui->line_filePath->setText(file);
         }
     });
-    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-    connect(ui->line_filePath, &QLineEdit::textChanged, [=](){
-        QFileInfo file(ui->line_filePath->text());
-        ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(file.exists());
-    });
+    connect(ui->line_filePath, &QLineEdit::textChanged, this, &ChooseSourceDialog::updateButtonStatus);
     connect(ui->radio_getFromRepo, &QRadioButton::clicked, ui->radio_getFromLocal, &QRadioButton::clicked);
     connect(ui->radio_getFromLocal, &QRadioButton::clicked, [=](){
         ui->line_filePath->setEnabled(!ui->radio_getFromRepo->isChecked());
         ui->btn_open->setEnabled(!ui->radio_getFromRepo->isChecked());
+        updateButtonStatus();
     });
+    updateButtonStatus();
 }
 
 ChooseSourceDialog::InstallerType ChooseSourceDialog::getInstallerType() {
@@ -46,4 +44,14 @@ ChooseSourceDialog::InstallerType ChooseSourceDialog::getInstallerType() {
 
 QString ChooseSourceDialog::getInstallerPath() {
     return ui->line_filePath->text();
+}
+
+void ChooseSourceDialog::updateButtonStatus() {
+    if(ui->radio_getFromRepo->isChecked()) {
+        ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+    } else {
+        QFileInfo file(ui->line_filePath->text());
+        ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(file.exists());
+    }
+
 }

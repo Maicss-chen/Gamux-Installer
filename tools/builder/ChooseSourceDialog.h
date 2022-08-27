@@ -21,6 +21,7 @@ public:
     explicit ChooseSourceDialog(QWidget *parent= nullptr);
     InstallerType getInstallerType();
     QString getInstallerPath();
+    void updateButtonStatus();
 private:
     Ui::ChooseSourceDialog *ui;
 };

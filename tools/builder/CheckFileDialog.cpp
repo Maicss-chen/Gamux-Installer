@@ -8,6 +8,7 @@
 #include <QNetworkReply>
 #include <QDataStream>
 #include <QFile>
+#include <QDir>
 #include <QTimer>
 #include <QApplication>
 #include <utility>
@@ -74,8 +75,11 @@ void CheckFileDialog::checkFile() {
 void CheckFileDialog::updateFile() {
     setMessage("正在下载安装器");
     QString dataDir = getDataPath();
+    QDir d(dataDir);
+    d.mkdir( m_filename.left(m_filename.lastIndexOf("/")));
     static QFile installerFile(dataDir + "/" + m_filename);
     installerFile.open(QFile::WriteOnly);
+
 
     networkReply = networkAccessManager->get(QNetworkRequest(QString(SERVER_URL) + m_filename));
 
