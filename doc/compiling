@@ -1,0 +1,51 @@
+## 编译
+
+首先安装debootstrap,然后安装debian10 chroot环境
+X86
+```
+sudo debootstrap --arch amd64 buster /mnt/debian10 http://ftp.cn.debian.org/debian
+```
+
+ARM
+```
+sudo debootstrap --arch arm64 buster /mnt/debian10 http://ftp.cn.debian.org/debian
+```
+
+然后软链接必要的环境
+```
+sudo mount --bind /proc /mnt/debian10/proc
+sudo mount --bind /sys /mnt/debian10/sys
+sudo mount --bind /dev /mnt/debian10/dev
+```
+
+进入chroot
+```
+sudo chroot /mnt/debian10 /bin/bash --login
+# cd ~
+```
+
+在chroot内执行，安装必要的编译依赖（如果有缺，请自行继续安装）
+```
+apt install cmake git build-essential
+git clone https://github.com/Maicss-chen/Gamux-Installer.git
+```
+
+拉取预编译的QT（也可自行编译）
+下载对应架构的版本，地址为：https://github.com/Gamuxorg/installer-qt/releases，下载后解压即可
+
+开始编译
+```
+cd Gamux-Installer
+mkdir build && cd build
+CMAKE_PREFIX_PATH=/Path/To/QtInstallationFolder/ cmake ..
+LD_LIBRARY_PATH=/Path/To/QtInstallationFolder/lib make -j$(nproc)
+```
+
+编译完成后，将qt与installer打包为appimage格式，x86文件名为installer_x86_64,arm文件名为installer_aarch64
+
+将所有架构的installer文件打包为tar，文件名为installer-<版本号>.tar
+```
+tar acvf install-<version>.tar installer_*
+```
+
+最后运行builder即可,选择本地安装器，选择tar即可。
