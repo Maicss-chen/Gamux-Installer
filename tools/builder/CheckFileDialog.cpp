@@ -49,7 +49,9 @@ void CheckFileDialog::checkFile() {
     if (installerFile.open(QFile::ReadOnly)) {
         setMessage("检查"+m_name+"更新");
         QString localInstallerMd5 = getMd5(dataDir + "/" + m_filename);
-        networkReply = networkAccessManager->get(QNetworkRequest(QString(SERVER_URL) + m_filename + ".md5"));
+        QNetworkRequest req(QString(SERVER_URL) + m_filename + ".md5");
+        req.setAttribute(QNetworkRequest::RedirectPolicyAttribute, true);
+        networkReply = networkAccessManager->get(req);
         connect(networkReply, &QNetworkReply::finished, [=](){
             if (networkReply->error() != QNetworkReply::NoError) {
                 MessageBoxExec("错误", m_name+"校验信息下载失败 (错误码："+QString::number(networkReply->error())+")");
@@ -80,8 +82,9 @@ void CheckFileDialog::updateFile() {
     static QFile installerFile(dataDir + "/" + m_filename);
     installerFile.open(QFile::WriteOnly);
 
-
-    networkReply = networkAccessManager->get(QNetworkRequest(QString(SERVER_URL) + m_filename));
+    QNetworkRequest req(QString(SERVER_URL) + m_filename);
+    req.setAttribute(QNetworkRequest::RedirectPolicyAttribute, true);
+    networkReply = networkAccessManager->get(req);
 
     connect(networkReply, &QNetworkReply::readyRead, [=](){
         QByteArray data = networkReply->readAll();
@@ -98,12 +101,13 @@ void CheckFileDialog::updateFile() {
 
     connect(networkReply, &QNetworkReply::finished, [=](){
         installerFile.close();
+        QVariant statusCode = networkReply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
 
         if (networkReply->error() == QNetworkReply::NoError) {
             setMessage("下载完成");
             close();
         } else {
-            MessageBoxExec("错误", m_name+"下载失败 (错误码："+QString::number(networkReply->error())+")");
+            MessageBoxExec("错误", m_name+"下载失败 (错误码："+QString::number(statusCode.toInt())+")");
             m_isSuccess = false;
             close();
         }
