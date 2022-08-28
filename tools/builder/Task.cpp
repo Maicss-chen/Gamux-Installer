@@ -96,7 +96,7 @@ void Task::start() {
     json_config.insert("data","data");
     json_config.insert("header","header."+getExtendNameFromPath(headerImage.fileName()));
     json_config.insert("icon","data/icon."+getExtendNameFromPath(icon.fileName()));
-    json_config.insert("readmeUrl","https://www.linuxgame.cn/donate-gamux-cash");
+    json_config.insert("readmeUrl",README_URL);
     QJsonArray games;
     for (const auto& i : config.gameDir) {
         QJsonObject game_obj;

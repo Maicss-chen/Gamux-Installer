@@ -6,6 +6,10 @@
 #define SERVER_URL "http://de.linuxgame.cn/gamux-installer/"
 #endif
 
+#ifndef README_URL
+#define README_URL "https://www.linuxgame.cn/donate-gamux-cash"
+#endif
+
 #ifndef GAMEINSTALLER_UTILS_H
 #define GAMEINSTALLER_UTILS_H
 
