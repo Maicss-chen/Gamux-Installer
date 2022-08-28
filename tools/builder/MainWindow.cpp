@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
             qDebug()<<"Init Not Success!";
             exit(1);
         }
-        task.setInstallerFile(getDataPath()+"/installer-"+QString(VERSION)+".tar");
+        task.setInstallerFile(getDataPath() + "/" + QString(VERSION) + "/installer-"+QString(VERSION)+".tar");
     } else {
         task.setInstallerFile(chooseSourceDialog->getInstallerPath());
     }
