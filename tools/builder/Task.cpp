@@ -9,6 +9,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QProcess>
+#include <sys/stat.h>
 
 void Task::setConfig(Task::Config c) {
     config = c;
@@ -124,6 +125,8 @@ void Task::start() {
     std::string cmd = "cd "+workDir.path().toStdString()+" && tar -cf pkg.tar *";
     system(cmd.c_str());
 
+    qDebug()<<installerFile();
+
     int count = getFileLineCount(this->installerFile());
 
     QString script = "#!/bin/bash\n"
@@ -168,6 +171,8 @@ void Task::start() {
 
     out.flush();
     out.close();
+
+    chmod(outfilename.toUtf8(), 0755);
 
     emit updateProgress(100,100,"完成："+outfilename);
 }
