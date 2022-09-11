@@ -11,7 +11,7 @@ set(SOURCE
         pages/InstallPage.h
         Task.cpp
         Task.h
-        ../utils/tar.h widgets/GWidget.cpp widgets/GWidget.h widgets/GTitleBar.cpp widgets/GTitleBar.h widgets/GButton.cpp widgets/GButton.h pages/MainPage.cpp pages/MainPage.h widgets/GProgressBar.cpp widgets/GProgressBar.h widgets/GHeader.cpp widgets/GHeader.h)
+        ../utils/tar.h widgets/GWidget.cpp widgets/GWidget.h widgets/GTitleBar.cpp widgets/GTitleBar.h widgets/GButton.cpp widgets/GButton.h pages/MainPage.cpp pages/MainPage.h widgets/GProgressBar.cpp widgets/GProgressBar.h widgets/GHeader.cpp widgets/GHeader.h ../utils/XZip.cpp ../utils/XZip.h)
 include_directories(${CMAKE_SOURCE_DIR}/utils)
 
 set(CMAKE_CXX_STANDARD 14)

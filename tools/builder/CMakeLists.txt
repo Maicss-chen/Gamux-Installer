@@ -16,6 +16,8 @@ set(SOURCE
         ${CMAKE_SOURCE_DIR}/utils/TarFile.cpp
         ${CMAKE_SOURCE_DIR}/utils/TarFile.h
         ${CMAKE_SOURCE_DIR}/utils/tar.h
+        ${CMAKE_SOURCE_DIR}/utils/Buffer.h
+        ${CMAKE_SOURCE_DIR}/utils/Buffer.cpp
         CheckFileDialog.cpp
         CheckFileDialog.h
         ChooseSourceDialog.ui
